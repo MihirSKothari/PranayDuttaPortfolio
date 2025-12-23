@@ -1,0 +1,106 @@
+@font-face {
+  font-family: 'Neris';
+  src: url('fonts/Neris-Thin.otf') format('opentype');
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'Neris';
+  src: url('fonts/Neris-Light.otf') format('opentype');
+  font-weight: 300;
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: #9c9c9c;
+  background: #000;
+  font-family: 'Neris', sans-serif;
+}
+
+/* Fullscreen hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background-image: url("Temp/Posters/waves.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Extra dark overlay for readability */
+/*PDNOTE: added overlay to get 20% opacity, can remove it so that you are able to control the opacity of any background image yourself*/
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  mix-blend-mode: multiply;
+}
+
+/* Make sure content sits above overlay */
+.hero-inner,
+.hero-nav {
+  position: relative;
+  z-index: 1;
+}
+
+/* Center name */
+.site-name {
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 2.3rem;
+}
+
+/* Bottom navigation */
+.hero-nav {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 7rem;
+  font-size: 1.5rem;
+
+}
+
+.hero-nav a {
+  color: #9c9c9c;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+}
+
+.hero-nav a:hover {
+  color: #b7c39d;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+  .hero-nav {
+    gap: 1.75rem;
+    bottom: 15%;
+    font-size: 1.4rem;
+  }
+
+  .site-name {
+    letter-spacing: 0.25em;
+  }
+}
