@@ -39,7 +39,7 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background-image: url("Temp/Posters/waves.jpg");
+  background-image: url("./waves.jpg");
   background-size: cover;
   background-position: center;
 }
