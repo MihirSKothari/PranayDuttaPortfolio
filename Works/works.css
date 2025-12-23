@@ -53,7 +53,7 @@ body {
   min-height: 100vh;
   display: flex;
   overflow: hidden;
-  background-image: url("./waves.jpg");
+  background-image: url("../waves.jpg");
   background-size: cover;
   background-position: center;
 }
