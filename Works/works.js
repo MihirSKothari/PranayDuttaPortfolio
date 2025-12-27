@@ -37,99 +37,117 @@ function renderProject(project) {
 
 let slideshowTimer = null;
 
-function initSlideshow() {
-    const track = document.getElementById('slides-track');
-    const slides = Array.from(track.children);
-    const dotsContainer = document.getElementById('slideshow-dots');
-    const prevBtn = document.getElementById('slide-prev');
-    const nextBtn = document.getElementById('slide-next');
+function initSlideshow(totalImages) {
+  const track = document.getElementById('slides-track');
+  const slides = Array.from(track.children);      // image1..imageN
+  const dotsContainer = document.getElementById('slideshow-dots');
+  const prevBtn = document.getElementById('slide-prev');
+  const nextBtn = document.getElementById('slide-next');
 
+  const gap = parseFloat(getComputedStyle(track).gap) || 32;  // px gap from CSS
+  const states = totalImages;                                  // one state per image
 
-    const total = slides.length;      // 4
-    const states = total;             // 4 states
-    let state = 0;
+  let current = 0;                                             // 0..N‑1 (image1 at 0)
+  let offsets = [];                                            // offsets[i] for image i
+  let dots = [];
 
-    // Ensure flex basis is 50%
-    slides.forEach(slide => {
-        slide.style.flex = '0 0 50%';
+  // ----- measure slide widths and build offsets -----
+  function measure() {
+    const widths = slides.map(slide => slide.getBoundingClientRect().width);
+    offsets = [];
+    let acc = 0;
+    widths.forEach((w, i) => {
+      offsets[i] = acc;               // x-position where image i starts
+      acc += w + gap;
     });
+  }
 
-    // Measure slide width + gap in pixels
-    const firstSlide = slides[0];
-    const slideWidth = firstSlide.getBoundingClientRect().width;
-    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 0);
-    const step = slideWidth + gap;    // how far we move for one state
+  function goToState(i) {
+    // wrap index 0..N-1
+    current = (i + states) % states;
+    const offsetPx = -offsets[current];
+    track.style.transform = `translateX(${offsetPx}px)`;
+    setActiveDot(current);
+  }
 
-    // ----- dots -----
+  // ----- dots -----
+  function buildDots() {
     dotsContainer.innerHTML = '';
-    const dots = [];
+    dots = [];
     for (let i = 0; i < states; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'slideshow-dot' + (i === 0 ? ' is-active' : '');
-        dotsContainer.appendChild(dot);
-        dots.push(dot);
+      const dot = document.createElement('span');
+      dot.className = 'slideshow-dot' + (i === 0 ? ' is-active' : '');
+      dotsContainer.appendChild(dot);
+      dots.push(dot);
     }
+  }
 
-    function setActiveDot(i) {
-        dots.forEach((dot, idx) => {
-            dot.classList.toggle('is-active', idx === i);
-        });
+  function setActiveDot(i) {
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('is-active', idx === i);
+    });
+  }
+
+  // ----- controls + auto-advance -----
+  function setup() {
+    measure();
+    buildDots();
+    goToState(0);                      // image1 at position1
+
+    if (slideshowTimer) {
+      clearInterval(slideshowTimer);
+      slideshowTimer = null;
     }
-
-    function goToState(i) {
-        if (i >= states) i = 0;
-        state = i;
-
-        const leftIndex = state;              // 0,1,2,3
-        const offsetPx = -(leftIndex * step); // 0, -step, -2*step, -3*step
-        track.style.transform = `translateX(${offsetPx}px)`;
-        setActiveDot(state);
-    }
-
-    // clear old timer
-    if (slideshowTimer !== null) {
-        clearInterval(slideshowTimer);
-        slideshowTimer = null;
-    }
-
-    // auto-advance
     slideshowTimer = setInterval(() => {
-        goToState(state + 1);
+      goToState(current + 1);          // next image as position1
     }, 5000);
 
-    // clicking dots: jump + stop auto
     dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => {
-            if (slideshowTimer !== null) {
-                clearInterval(slideshowTimer);
-                slideshowTimer = null;
-            }
-            goToState(i);
-        });
+      dot.onclick = () => {
+        if (slideshowTimer) {
+          clearInterval(slideshowTimer);
+          slideshowTimer = null;
+        }
+        goToState(i);
+      };
     });
+
     if (prevBtn) {
-        prevBtn.onclick = () => {
-            if (slideshowTimer !== null) {
-                clearInterval(slideshowTimer);
-                slideshowTimer = null;
-            }
-            const nextState = state === 0 ? states - 1 : state - 1;
-            goToState(nextState);
-        };
+      prevBtn.onclick = () => {
+        if (slideshowTimer) {
+          clearInterval(slideshowTimer);
+          slideshowTimer = null;
+        }
+        goToState(current - 1);
+      };
     }
 
     if (nextBtn) {
-        nextBtn.onclick = () => {
-            if (slideshowTimer !== null) {
-                clearInterval(slideshowTimer);
-                slideshowTimer = null;
-            }
-            goToState(state + 1);
-        };
+      nextBtn.onclick = () => {
+        if (slideshowTimer) {
+          clearInterval(slideshowTimer);
+          slideshowTimer = null;
+        }
+        goToState(current + 1);
+      };
     }
-    goToState(0);
-}
+  }
 
+  // ----- wait for images to load, then measure+setup -----
+  let loaded = 0;
+  slides.forEach(img => {
+    if (img.complete) {
+      loaded++;
+      if (loaded === slides.length) setup();
+    } else {
+      img.onload = () => {
+        loaded++;
+        if (loaded === slides.length) setup();
+      };
+    }
+  });
+  if (loaded === slides.length) setup();
+}
 
 
 function setCurrentProject(id) {
