@@ -1,11 +1,15 @@
 let allProjects = [];
 let currentProjectId = null;
 
+let modalImageIndex = 0;
+let modalImageList = [];
+
 const prevBtn = document.getElementById('slide-prev');
 const nextBtn = document.getElementById('slide-next');
 
+
 function renderProject(project) {
-    // 1. Title: "Title (date)"
+    // 1. Title
     const titleEl = document.getElementById('project-title');
     titleEl.textContent = `${project.title} (${project.date})`;
 
@@ -13,11 +17,28 @@ function renderProject(project) {
     const track = document.getElementById('slides-track');
     track.innerHTML = '';
 
-    project.images.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;                       // e.g. "Proscenium/Picture1.jpg"
-        img.alt = project.title;
-        track.appendChild(img);
+    // 2b. Grid images
+    const grid = document.getElementById('img-grid-images');
+    if (grid) grid.innerHTML = '';
+    
+    modalImageList = project.images;
+
+    project.images.forEach((src, index) => {
+        // slideshow img
+        const slideImg = document.createElement('img');
+        slideImg.src = src;
+        slideImg.alt = project.title;
+        slideImg.addEventListener('click', () => openImageModal(index, project.title));
+        track.appendChild(slideImg);
+
+        // grid img
+        if (grid) {
+            const gridImg = document.createElement('img');
+            gridImg.src = src;
+            gridImg.alt = project.title;
+            gridImg.addEventListener('click', () => openImageModal(index, project.title));
+            grid.appendChild(gridImg);
+        }
     });
 
     // 3. Description paragraphs
@@ -35,118 +56,177 @@ function renderProject(project) {
 
 }
 
+function openImageModal(index, alt) {
+    const modal = document.getElementById('image-modal');
+    const imgEl = document.getElementById('image-modal_img');
+
+    modalImageIndex = index;                         // remember current position
+    imgEl.src = modalImageList[modalImageIndex];    // load correct image
+    imgEl.alt = alt || '';
+
+    modal.classList.add('is-open');
+}
+
+function showModalImageAt(index) {
+    const imgEl = document.getElementById('image-modal_img');
+    const total = modalImageList.length;
+
+    if (!total) return;
+
+    // wrap around 0..total-1
+    modalImageIndex = (index + total) % total;
+    imgEl.src = modalImageList[modalImageIndex];
+}
+
+function showPrevModalImage() {
+    showModalImageAt(modalImageIndex - 1);  // image1 -> last, etc.
+}
+
+function showNextModalImage() {
+    showModalImageAt(modalImageIndex + 1);  // last -> image1
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('image-modal');
+    const imgEl = document.getElementById('image-modal_img');
+
+    modal.classList.remove('is-open');
+    imgEl.src = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('image-modal');
+    const closeBtn = document.querySelector('.image-modal_close');
+    const backdrop = document.querySelector('.image-modal_backdrop');
+    const leftArrow = document.querySelector('.modal-arrow-left');
+    const rightArrow = document.querySelector('.modal-arrow-right');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeImageModal);
+    if (backdrop) backdrop.addEventListener('click', closeImageModal);
+
+    if (leftArrow) leftArrow.addEventListener('click', showPrevModalImage);
+    if (rightArrow) rightArrow.addEventListener('click', showNextModalImage);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeImageModal();
+        if (e.key === 'ArrowLeft') showPrevModalImage();
+        if (e.key === 'ArrowRight') showNextModalImage();
+    });
+});
+
+
 let slideshowTimer = null;
 
 function initSlideshow(totalImages) {
-  const track = document.getElementById('slides-track');
-  const slides = Array.from(track.children);      // image1..imageN
-  const dotsContainer = document.getElementById('slideshow-dots');
-  const prevBtn = document.getElementById('slide-prev');
-  const nextBtn = document.getElementById('slide-next');
+    const track = document.getElementById('slides-track');
+    const slides = Array.from(track.children);      // image1..imageN
+    const dotsContainer = document.getElementById('slideshow-dots');
+    const prevBtn = document.getElementById('slide-prev');
+    const nextBtn = document.getElementById('slide-next');
 
-  const gap = parseFloat(getComputedStyle(track).gap) || 32;  // px gap from CSS
-  const states = totalImages;                                  // one state per image
+    const gap = parseFloat(getComputedStyle(track).gap) || 32;  // px gap from CSS
+    const states = totalImages;                                  // one state per image
 
-  let current = 0;                                             // 0..N‑1 (image1 at 0)
-  let offsets = [];                                            // offsets[i] for image i
-  let dots = [];
+    let current = 0;                                             // 0..N‑1 (image1 at 0)
+    let offsets = [];                                            // offsets[i] for image i
+    let dots = [];
 
-  // ----- measure slide widths and build offsets -----
-  function measure() {
-    const widths = slides.map(slide => slide.getBoundingClientRect().width);
-    offsets = [];
-    let acc = 0;
-    widths.forEach((w, i) => {
-      offsets[i] = acc;               // x-position where image i starts
-      acc += w + gap;
-    });
-  }
-
-  function goToState(i) {
-    // wrap index 0..N-1
-    current = (i + states) % states;
-    const offsetPx = -offsets[current];
-    track.style.transform = `translateX(${offsetPx}px)`;
-    setActiveDot(current);
-  }
-
-  // ----- dots -----
-  function buildDots() {
-    dotsContainer.innerHTML = '';
-    dots = [];
-    for (let i = 0; i < states; i++) {
-      const dot = document.createElement('span');
-      dot.className = 'slideshow-dot' + (i === 0 ? ' is-active' : '');
-      dotsContainer.appendChild(dot);
-      dots.push(dot);
+    // ----- measure slide widths and build offsets -----
+    function measure() {
+        const widths = slides.map(slide => slide.getBoundingClientRect().width);
+        offsets = [];
+        let acc = 0;
+        widths.forEach((w, i) => {
+            offsets[i] = acc;               // x-position where image i starts
+            acc += w + gap;
+        });
     }
-  }
 
-  function setActiveDot(i) {
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('is-active', idx === i);
-    });
-  }
-
-  // ----- controls + auto-advance -----
-  function setup() {
-    measure();
-    buildDots();
-    goToState(0);                      // image1 at position1
-
-    if (slideshowTimer) {
-      clearInterval(slideshowTimer);
-      slideshowTimer = null;
+    function goToState(i) {
+        // wrap index 0..N-1
+        current = (i + states) % states;
+        const offsetPx = -offsets[current];
+        track.style.transform = `translateX(${offsetPx}px)`;
+        setActiveDot(current);
     }
-    slideshowTimer = setInterval(() => {
-      goToState(current + 1);          // next image as position1
-    }, 5000);
 
-    dots.forEach((dot, i) => {
-      dot.onclick = () => {
-        if (slideshowTimer) {
-          clearInterval(slideshowTimer);
-          slideshowTimer = null;
+    // ----- dots -----
+    function buildDots() {
+        dotsContainer.innerHTML = '';
+        dots = [];
+        for (let i = 0; i < states; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'slideshow-dot' + (i === 0 ? ' is-active' : '');
+            dotsContainer.appendChild(dot);
+            dots.push(dot);
         }
-        goToState(i);
-      };
+    }
+
+    function setActiveDot(i) {
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('is-active', idx === i);
+        });
+    }
+
+    // ----- controls + auto-advance -----
+    function setup() {
+        measure();
+        buildDots();
+        goToState(0);                      // image1 at position1
+
+        if (slideshowTimer) {
+            clearInterval(slideshowTimer);
+            slideshowTimer = null;
+        }
+        slideshowTimer = setInterval(() => {
+            goToState(current + 1);          // next image as position1
+        }, 5000);
+
+        dots.forEach((dot, i) => {
+            dot.onclick = () => {
+                if (slideshowTimer) {
+                    clearInterval(slideshowTimer);
+                    slideshowTimer = null;
+                }
+                goToState(i);
+            };
+        });
+
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                if (slideshowTimer) {
+                    clearInterval(slideshowTimer);
+                    slideshowTimer = null;
+                }
+                goToState(current - 1);
+            };
+        }
+
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (slideshowTimer) {
+                    clearInterval(slideshowTimer);
+                    slideshowTimer = null;
+                }
+                goToState(current + 1);
+            };
+        }
+    }
+
+    // ----- wait for images to load, then measure+setup -----
+    let loaded = 0;
+    slides.forEach(img => {
+        if (img.complete) {
+            loaded++;
+            if (loaded === slides.length) setup();
+        } else {
+            img.onload = () => {
+                loaded++;
+                if (loaded === slides.length) setup();
+            };
+        }
     });
-
-    if (prevBtn) {
-      prevBtn.onclick = () => {
-        if (slideshowTimer) {
-          clearInterval(slideshowTimer);
-          slideshowTimer = null;
-        }
-        goToState(current - 1);
-      };
-    }
-
-    if (nextBtn) {
-      nextBtn.onclick = () => {
-        if (slideshowTimer) {
-          clearInterval(slideshowTimer);
-          slideshowTimer = null;
-        }
-        goToState(current + 1);
-      };
-    }
-  }
-
-  // ----- wait for images to load, then measure+setup -----
-  let loaded = 0;
-  slides.forEach(img => {
-    if (img.complete) {
-      loaded++;
-      if (loaded === slides.length) setup();
-    } else {
-      img.onload = () => {
-        loaded++;
-        if (loaded === slides.length) setup();
-      };
-    }
-  });
-  if (loaded === slides.length) setup();
+    if (loaded === slides.length) setup();
 }
 
 

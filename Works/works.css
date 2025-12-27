@@ -44,6 +44,10 @@ body {
   color: #9c9c9c;
   background: #000;
   font-family: 'Neris', sans-serif;
+  background-image: url("../waves.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 /* Background wrapper */
@@ -52,10 +56,6 @@ body {
   position: relative;
   min-height: 100vh;
   display: flex;
-  overflow: hidden;
-  background-image: url("../waves.jpg");
-  background-size: cover;
-  background-position: center;
 }
 
 .works-wrapper::before {
@@ -66,19 +66,18 @@ body {
   mix-blend-mode: multiply;
 }
 
-.works-left,
-.project-details {
-  position: relative;
-  z-index: 1;
-}
 /*===== LEFT SIDE =====*/
 
 .works-left {
+  position: sticky;
+  top:0;
+  height: 100vh;
   width: 26%;
   min-width: 230px;
   padding: 2.5rem 2.5rem 2.8rem;
   display: flex;
   flex-direction: column;
+  z-index:1;
 }
 
 .top-bar {
@@ -173,8 +172,9 @@ body {
 }
 
 /*===== RIGHT SIDE =====*/
-
 .project-details {
+  position: relative;
+  z-index: 1;
   flex: 1;
   padding: 2.5rem 2.8rem 2.8rem 0;
   display: flex;
@@ -258,21 +258,20 @@ body {
   display: flex;
   height: 100%;
   transition: transform 0.6s ease;
-  gap: 2rem;          /* fixed visual gap */
-  /* no flex: 0 0 50% here */
+  gap: 2rem;
 }
 
-/* 2 slides visible at a time; visual gap via padding in container */
+
 .slides-track img {
-  height: 100%;          /* 380px via container */
+  height: 100%;
   width: auto;
-  max-width: 50%;        /* at most half the container each */
-  flex: 0 0 auto;        /* no flex growth */
+  max-width: 50%;
+  flex: 0 0 auto;
   object-fit: contain;
+  cursor: pointer;
 }
 
 /*dots below slideshow*/
-
 .slideshow-dots {
   display: flex;
   justify-content: center;
@@ -295,7 +294,6 @@ body {
 
 
 /* Description text */
-
 .project-text {
   margin-top: 0;
   margin-bottom: 1.5rem;
@@ -307,6 +305,149 @@ body {
 
 .project-text p + p {
   margin-top: 1.2rem;   /* spacing between paragraphs */
+}
+
+/* Video inlay */
+.video-inlay {
+  padding-top: 5rem;
+  width:100%;
+  height: auto;
+}
+
+.video-inlay-inner {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;      /* 16:9 aspect ratio box */
+  overflow: hidden;
+}
+
+.video-inlay-inner iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/*image-grid*/
+.project-img-grid {
+  padding-top: 5rem;
+}
+
+.img-grid-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.2rem;
+}
+
+.img-grid-images img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+
+/* Fullscreen image */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.image-modal.is-open {
+  display: flex;
+}
+
+.image-modal_backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.image-modal_content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 1;
+}
+
+.image-modal_content img {
+  display: block;
+  width:auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.image-modal_caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.2rem 1.6rem;
+  font-family: 'Neris', sans-serif;
+  font-style: italic;
+  color: #f5f5f5;
+  pointer-events: none;        /* clicks go through to image/arrows */
+
+}.image-modal_caption-inner {
+  max-width: 80vw;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.image-modal_caption-title {
+  font-weight: 300;
+  font-size: 120%;
+}
+
+.image-modal_caption-text {
+  font-weight: 100;
+  opacity: 0.9;
+}
+
+
+.modal-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9c9c9c;
+  font-size: 4rem;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+  z-index:5;
+}
+
+.modal-arrow-left {
+  left: 0.4rem;
+}
+
+.modal-arrow-right {
+  right: 0.4rem;
+}
+
+.modal-arrow:hover {
+  color: #c3ff4a;
+}
+
+.image-modal_close {
+  position: absolute;
+  top: -1.8rem;
+  right: -1.8rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 2.4rem;
+  cursor: pointer;
 }
 
 /* Responsive tweaks */

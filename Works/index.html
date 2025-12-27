@@ -22,7 +22,7 @@
 
             <!-- Projects list -->
             <div class="projects-block">
-                <nav class="project-menu", id="project-menu">
+                <nav class="project-menu" id="project-menu">
                 </nav>            
             </div>
 
@@ -41,7 +41,7 @@
         <div class="project-details">
             <!-- Title bar -->
             <header class="project-title-bar">
-                <h1 class="project-title", id="project-title"></h1>
+                <h1 class="project-title" id="project-title"></h1>
                 <div class="project-title-separator"></div>
             </header>
 
@@ -50,13 +50,39 @@
                 <!-- 6: Slideshow container -->
                 <section class="slideshow-container" id="slideshow">
                     <button class="slide-arrow slide-arrow-left" id="slide-prev">&#10094;</button>
-                    <div class="slides-track". id="slides-track"></div>
+                    <div class="slides-track" id="slides-track"></div>
                     <button class="slide-arrow slide-arrow-right" id="slide-next">&#10095;</button>
                 </section>
                 <div class="slideshow-dots" id="slideshow-dots"></div>
                 <!-- Description text -->
-                <section class="project-text", id="project-text"></section>
+                <section class="project-text" id="project-text"></section>
+                <section class="video-inlay">
+                    <div class="video-inlay-inner">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Project video" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                    </div>
+                </section>
+                <section class="project-img-grid" id="project-img-grid">
+                    <div class="img-grid-images" id="img-grid-images"></div>
+                </section>
+                <section class="installation-img-grid" id="installation-img-grid"></section>
             </main>
+        </div>
+    </div>
+    <div id="image-modal" class="image-modal">
+        <div class="image-modal_backdrop"></div>
+        <div class="image-modal_content">
+            <button class="modal-arrow modal-arrow-left" id="modal-prev">&#10094;</button>
+            <button class="image-modal_close" aria-label="Close image">&times;</button>
+            <button class="modal-arrow modal-arrow-right" id="modal-next">&#10095;</button>
+            <img id="image-modal_img" src="" alt="">
+            <div class="image-modal_caption">
+                <div class="image-modal_caption-inner">
+                    <div class="image-modal_caption-title" id="image-modal_title">Title</div>
+                    <div class="image-modal_caption-text" id="image-modal_caption">Medium<br>Size<br>Year</div>
+                </div>
+            </div>
         </div>
     </div>
 
