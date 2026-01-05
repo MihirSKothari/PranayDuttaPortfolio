@@ -8,94 +8,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="works.js"></script>
 </head>
-<body>
-    <div class="works-wrapper">
 
-        <div class="top-bar" aria-hidden="true"></div>
-        <button id="hamburger-toggle" class="hamburger-toggle-fixed" aria-label="Toggle menu">
+<body>
+    <div class="bgLayer" aria-hidden="true"></div>
+    <div class="worksWrapper">
+
+        <div class="topBar" aria-hidden="true"></div>
+        <button id="hamburgerToggle" class="hamburgerToggleFixed" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
-        <header class="project-title-bar">
-            <h1 class="project-title" id="project-title"></h1>
-            <div class="project-title-separator"></div>
+        <header class="projectTitleBar">
+            <h1 class="projectTitle" id="projectTitle"></h1>
+            <div class="projectTitleSeparator"></div>
         </header>
 
         <!-- LEFT SIDE -->
-        <div class="left-panel-bg" aria-hidden="true"></div>
-        <aside class="works-left closed">
+        <div class="leftPanelBg" aria-hidden="true"></div>
+        <aside class="worksLeft closed">
+            <button id="homeIcon" class="homeIcon" hidden>
+                <svg class="homeIconSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                    focusable="false">
+                    <!-- House outline -->
+                    <path
+                        d="M4.5 10.5L12 4.25L19.5 10.5V19.25A2.25 2.25 0 0 1 17.25 21.5H6.75A2.25 2.25 0 0 1 4.5 19.25V10.5Z" />
+                    <!-- Door (rounded top) -->
+                    <path d="M10 21.5V15.9C10 14.55 10.9 13.75 12 13.75C13.1 13.75 14 14.55 14 15.9V21.5" />
+                </svg>
+            </button>
             <!-- Projects list -->
             <!--div class="works-label">WORKS</div-->
-            <div class="projects-block">
-                <nav class="project-menu" id="project-menu">
-                </nav>            
+            <div class="projectsBlock">
+                <nav class="projectMenu" id="projectMenu">
+                </nav>
             </div>
 
             <!-- Category list -->
-            <div class="categories-block">
-                <a href="#" class="category-link">Drawings</a>
-                <a href="#" class="category-link">Mixed Media</a>
-                <a href="#" class="category-link">Video</a>
-                <a href="#" class="category-link">Installation Views</a>
+            <div class="categoriesBlock">
+                <a href="#" class="categoryLink">Drawings</a>
+                <a href="#" class="categoryLink">Mixed Media</a>
+                <a href="#" class="categoryLink">Video</a>
+                <a href="#" class="categoryLink">Installation Views</a>
             </div>
 
         </aside>
 
         <!-- RIGHT SIDE -->
         <!-- All project details -->
-        <div class="project-details">
+        <div class="projectDetails">
             <!-- Main content -->
-            <main class="project-main">
+            <main class="projectMain">
                 <!-- 6: Slideshow container -->
-                <section class="slideshow-container" id="slideshow">
-                    <button class="slide-arrow slide-arrow-left" id="slide-prev">&#10094;</button>
-                    <div class="slides-track" id="slides-track"></div>
-                    <button class="slide-arrow slide-arrow-right" id="slide-next">&#10095;</button>
+                <section class="slideshowContainer" id="slideshow">
+                    <button class="slideArrow slideArrowLeft" id="slidePrev">&#10094;</button>
+                    <div class="slidesTrack" id="slidesTrack"></div>
+                    <button class="slideArrow slideArrowRight" id="slideNext">&#10095;</button>
                 </section>
-                <div class="slideshow-dots" id="slideshow-dots"></div>
-                
+                <div class="slideshowDots" id="slideshowDots"></div>
+
                 <!-- Description text -->
-                <section class="project-text" id="project-text"></section>
-                
+                <section class="projectText" id="projectText"></section>
+
                 <!-- Video -->
-                <section class="video-inlay" id="video-inlay" hidden>
-                    <div class="video-inlay-inner">
-                        <iframe id="project-video-iframe" src="" title="Project video" frameborder="0"
+                <section class="videoInlay" id="videoInlay" hidden>
+                    <div class="videoInlayInner">
+                        <iframe id="projectVideoiframe" src="" title="Project video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen></iframe>
                     </div>
                 </section>
-                <div class="video-separator"></div>
+                <div class="videoSeparator"></div>
                 <!-- Project images -->
-                <section class="project-img-grid" id="project-img-grid">
-                    <div class="project-grid-images" id="project-grid-images"></div>
+                <section class="projectImgGrid" id="projectImgGrid">
+                    <div class="projectGridImages" id="projectGridImages"></div>
                 </section>
-                <div class="installation-separator" id="installation-separator" hidden></div>
+                <div class="installationSeparator" id="installationSeparator" hidden></div>
                 <!-- Installation images -->
-                <section class="installation-img-grid" id="installation-img-grid" hidden>
-                    <div class="installation-grid-images" id="installation-grid-images"></div>
+                <section class="installationImgGrid" id="installationImgGrid" hidden>
+                    <div class="installationGridImages" id="installationGridImages"></div>
                 </section>
             </main>
         </div>
     </div>
-    
-    <div id="image-modal" class="image-modal">
-        <div class="image-modal_backdrop"></div>
-        <div class="image-modal_content">
-            <button class="modal-arrow modal-arrow-left" id="modal-prev">&#10094;</button>
-            <button class="image-modal_close" aria-label="Close image">&times;</button>
-            <button class="modal-arrow modal-arrow-right" id="modal-next">&#10095;</button>
-            <img id="image-modal_img" src="" alt="">
-            <div class="image-modal_caption">
-                <div class="image-modal_caption-text" id="image-modal_caption"></div>
-            </div>
+
+    <div id="imageModal" class="imageModal">
+        <div class="imageModalBackdrop"></div>
+        <div class="imageModalContent">
+            <button class="modalArrow modalArrowLeft" id="modalPrev">&#10094;</button>
+            <button class="imageModalClose" aria-label="Close image">&times;</button>
+            <button class="modalArrow modalArrowRight" id="modalNext">&#10095;</button>
+            <img id="imageModalImg" draggable="false" src="" alt="">
+            <div class="imageModalCaption" id="imageModalCaption"></div>
         </div>
     </div>
 
-    <section class="project-nav" id="project-nav">
-        <button type="button" class="project-nav-btn" id="project-prev-project">← Previous project</button>
-        <button type="button" class="project-nav-btn" id="project-next-project">Next project →</button>
+    <section class="projectNav" id="projectNav">
+        <button type="button" class="projectNavBtn" id="projectPrevProject">←</button>
+        <button type="button" class="projectNavBtn" id="projectNextProject">→</button>
     </section>
 
-    </body>
-    
-    </html>
+</body>
+
+</html>

@@ -27,6 +27,10 @@
 }
 
 
+:root {
+  --bg-url: url("../BG2.jpg");
+}
+
 *,
 *::before,
 *::after {
@@ -48,67 +52,83 @@ body {
   color: #9c9c9c;
   background: #000;
   font-family: 'Neris', sans-serif;
-  background-image: url("../BG2.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
 }
 
-/* Background wrapper */
+.bgLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--bg-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-.works-wrapper {
+.worksWrapper {
   position: relative;
   min-height: 100vh;
   display: flex;
 }
 
-.top-bar {
+.topBar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 8rem;
   z-index: 50;
   pointer-events: none;
+  overflow: hidden;
+
+  /* solid height (fade starts here) */
+  --panel-h: 80px;
+
+  /* fade length */
+  --fade-extend: 100px;
+
+  /* total height = solid + fade */
+  height: calc(var(--panel-h) + var(--fade-extend));
+
+  -webkit-mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) var(--panel-h),
+      rgba(0, 0, 0, 0) calc(var(--panel-h) + var(--fade-extend)));
+  mask-image: linear-gradient(to bottom,
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) var(--panel-h),
+      rgba(0, 0, 0, 0) calc(var(--panel-h) + var(--fade-extend)));
 }
 
-/* Masking layer (same bg as body) */
-.top-bar::before {
+.topBar::before {
   content: "";
   position: absolute;
   inset: 0;
-
-  background-image: url("../BG2.jpg");
+  background-image: var(--bg-url);
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
-
-  /* optional: if you want it to fade out softly like your panel mask */
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
+  background-repeat: no-repeat;
 }
 
-
 /* Fixed top bar containing hamburger + project title */
-.project-title-bar {
+.projectTitleBar {
   position: fixed;
   top: 2.5rem;
   z-index: 60;
-  /* stays below left panel (100) */
   padding: 0 2.8rem 1.4rem 6rem;
   background: transparent;
   width: 100%;
 }
 
 /* Fixed hamburger and title outside panel */
-.hamburger-toggle-fixed {
+.hamburgerToggleFixed {
   position: fixed;
   top: 3rem;
-  /* Matches original padding */
   left: 2.5rem;
-  /* Matches original padding */
   z-index: 110;
-  /* Above menu z:100 */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -122,7 +142,7 @@ body {
   transition: color 0.2s ease;
 }
 
-.hamburger-toggle-fixed span {
+.hamburgerToggleFixed span {
   display: block;
   height: 2px;
   width: 100%;
@@ -131,42 +151,41 @@ body {
   transform-origin: center;
 }
 
-.hamburger-toggle-fixed:hover {
-  color: #b7c39d;
+.hamburgerToggleFixed:hover {
+  color: #c3ff4a;
 }
 
-.hamburger-toggle-fixed.open span:nth-child(1) {
+.hamburgerToggleFixed.open span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
 
-.hamburger-toggle-fixed.open span:nth-child(2) {
+.hamburgerToggleFixed.open span:nth-child(2) {
   opacity: 0;
 }
 
-.hamburger-toggle-fixed.open span:nth-child(3) {
+.hamburgerToggleFixed.open span:nth-child(3) {
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
-
-.project-title {
+.projectTitle {
   font-weight: 300;
   font-size: 1.4rem;
 }
 
-.project-title-separator {
+.projectTitleSeparator {
   width: 100%;
   background-color: #9c9c9c;
   height: 2px;
   margin-top: 10px;
 }
 
-.video-separator {
+.videoSeparator {
   width: 100%;
   background-color: #9c9c9c;
   height: 2px;
 }
 
-.installation-separator {
+.installationSeparator {
   width: 100%;
   background-color: #9c9c9c;
   height: 2px;
@@ -175,56 +194,101 @@ body {
 /*===== LEFT PANEL =====*/
 
 /* NEW: Panel-only background overlay that fades in (does NOT slide) */
-.left-panel-bg {
+
+.leftPanelBg {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
+  z-index: 90;
 
-  /* panel width + extra area for the fade */
-  width: 600px;
+  background: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 
-  /* same image as body */
-  background-image: url('../BG2.jpg');
+  --panel-w: 600px;
+  /* fallback */
+  --fade-extend: 220px;
+  /* how far the fade continues to the right */
+
+  width: calc(var(--panel-w) + var(--fade-extend));
+  overflow: hidden;
+  pointer-events: none;
+
+  -webkit-mask-image: linear-gradient(to right,
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
+      rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to right,
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
+      rgba(0, 0, 0, 0) 100%);
+}
+
+
+.leftPanelBg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-image: var(--bg-url);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-
-  /* Fade effect (preferred): mask to transparent on the right */
-  -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
-
-  z-index: 90;
-  /* between content (1) and panel (100) */
-  pointer-events: none;
-  /* never blocks clicks */
-
-  opacity: 0;
-  transition: opacity 0.5s ease;
 }
 
-.left-panel-bg.is-visible {
+.leftPanelBg.is-visible {
   opacity: 1;
 }
 
-.works-left {
+.homeIcon {
+  position: fixed;
+  top: 2.3rem;
+  left: 5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #9c9c9c;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.homeIcon:hover {
+  color: #c3ff4a;
+}
+
+.homeIconSVG {
+  height: 40px;
+  width: 40px;
+  stroke-width: 1.25;
+}
+
+.worksLeft {
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: fixed;
   /* Changed from sticky for overlay */
   left: 0;
   top: 0;
   z-index: 100;
-  width: 26%;
+  min-width: 26%;
   height: 100vh;
-  width: 26%;
+  width: max-content;
+  /* grow to the longest line */
+  max-width: 100vw;
+  /* but never exceed the viewport */
   min-width: 230px;
   padding: 6rem 2.5rem 2.8rem;
   display: flex;
   flex-direction: column;
 }
 
-.works-left.closed {
+
+.worksLeft.closed {
   transform: translateX(-100%);
 }
 
@@ -237,14 +301,14 @@ body {
 
 /*===== PROJECT LIST =====*/
 
-.project-menu {
+.projectMenu {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
   margin-top: 2rem;
 }
 
-.project-link {
+.projectLink {
   display: block;
   font-weight: 100;
   font-size: 1.0rem;
@@ -252,20 +316,22 @@ body {
   text-decoration: none;
   transition: color 0.2s ease;
   letter-spacing: 0.07em;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
-.project-link:hover {
+.projectLink:hover {
   color: #c3ff4a;
   ;
 }
 
-.project-link.is-active {
+.projectLink.is-active {
   color: #c3ff4a;
 }
 
 /*===== OTHER PROJECTS BOTTOM =====*/
 
-.categories-block {
+.categoriesBlock {
   display: flex;
   position: relative;
   margin-top: auto;
@@ -274,7 +340,7 @@ body {
   gap: 0.6rem;
 }
 
-.category-link {
+.categoryLink {
   display: block;
   font-weight: 100;
   font-size: 1.0rem;
@@ -282,19 +348,21 @@ body {
   text-decoration: none;
   transition: color 0.2s ease;
   letter-spacing: 0.07em;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
-.category-link:hover {
+.categoryLink:hover {
   color: #c3ff4a;
   ;
 }
 
-.category-link.is-active {
+.categoryLink.is-active {
   color: #c3ff4a;
 }
 
 /*===== RIGHT SIDE =====*/
-.project-details {
+.projectDetails {
   position: relative;
   width: 100%;
   margin-left: 0;
@@ -308,14 +376,14 @@ body {
   /* soft fade */
 }
 
-.project-details.is-fading {
+.projectDetails.is-fading {
   opacity: 0;
 }
 
 
 /* Main content */
 
-.project-main {
+.projectMain {
   flex: 1;
   padding: 2rem 2.8rem 0;
   display: flex;
@@ -324,20 +392,21 @@ body {
 }
 
 /* 6: slideshow container */
-.slideshow-container {
+.slideshowContainer {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 500px;
+  height: max-content;
+  max-height: 500px;
   touch-action: pan-y;
   cursor: grab;
 }
 
-.slideshow-container.is-dragging {
+.slideshowContainer.is-dragging {
   cursor: grabbing;
 }
 
-.slide-arrow {
+.slideArrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -352,29 +421,32 @@ body {
   z-index: 5;
 }
 
-.slide-arrow-left {
+.slideArrowLeft {
   left: 0.4rem;
 }
 
-.slide-arrow-right {
+.slideArrowRight {
   right: 0.4rem;
 }
 
-.slide-arrow:hover {
+.slideArrow:hover {
   color: #c3ff4a;
 }
 
-.slides-track {
+.slidesTrack {
   display: flex;
   height: 100%;
   transition: transform 0.6s ease;
   gap: 2rem;
   user-select: none;
+  will-change: transform;
 }
 
+.slidesTrack.is-dragging {
+  transition: none;
+}
 
-
-.slides-track img {
+.slidesTrack img {
   height: 100%;
   width: auto;
   max-width: 50%;
@@ -387,29 +459,32 @@ body {
 }
 
 /*dots below slideshow*/
-.slideshow-dots {
+.slideshowDots {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
   margin-top: 1rem;
 }
 
-.slideshow-dot {
+.slideshowDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-
   background: #9c9c9c70;
 }
 
-.slideshow-dot.is-active {
+.slideshowDot:hover {
+  background: #c3ff4a;
+}
+
+.slideshowDot.is-active {
   background: #c3ff4a;
   border: 2px solid #c3ff4a;
 }
 
 
 /* Description text */
-.project-text {
+.projectText {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-weight: 100;
@@ -418,19 +493,19 @@ body {
   color: #9c9c9c
 }
 
-.project-text p+p {
+.projectText p+p {
   margin-top: 1.2rem;
   /* spacing between paragraphs */
 }
 
 /* Video inlay */
-.video-inlay {
+.videoInlay {
   padding-top: 5rem;
   width: 100%;
   height: auto;
 }
 
-.video-inlay-inner {
+.videoInlayInner {
   position: relative;
   width: 100%;
   padding-top: 56.25%;
@@ -438,7 +513,7 @@ body {
   overflow: hidden;
 }
 
-.video-inlay-inner iframe {
+.videoInlayInner iframe {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -447,49 +522,46 @@ body {
 }
 
 /*image-grid*/
-.project-img-grid {
+.projectImgGrid {
   padding-top: 5rem;
 }
 
-.project-grid-images {
+.projectGridImages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.2rem;
 }
 
-.project-grid-images img {
+.projectGridImages img {
   width: 100%;
   height: auto;
   object-fit: cover;
   cursor: pointer;
 }
 
-.installation-img-grid {
+.installationImgGrid {
   padding-top: 5rem;
 }
 
-.installation-grid-images {
+.installationGridImages {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.2rem;
 }
 
 
-.installation-grid-images img {
-  width: min(100%, 1100px);
-  /* 1100px is optional; remove if you want full width */
+.installationGridImages img {
+  width: 100%;
   height: auto;
-  /* preserves aspect ratio */
   object-fit: contain;
-  /* no cropping */
   display: block;
   cursor: pointer;
 }
 
 
 /* Fullscreen image */
-.image-modal {
+.imageModal {
   position: fixed;
   inset: 0;
   display: flex;
@@ -502,48 +574,60 @@ body {
   z-index: 1002;
 }
 
-.image-modal.is-open {
+.imageModal.is-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transition: opacity 0.5s ease, visibility 0s;
 }
 
-.image-modal_backdrop {
+.imageModalBackdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.image-modal.is-open .image-modal_backdrop {
+.imageModal.is-open .imageModalBackdrop {
   opacity: 1;
 }
 
-.image-modal_content {
+#imageModalImg {
+  will-change: transform, opacity;
+  transition: transform 260ms ease, opacity 260ms ease;
+}
+
+#imageModalImg.is-dragging {
+  transition: none;
+}
+
+.imageModalContent {
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
   z-index: 1;
   opacity: 0;
   transition: transform 0.5s ease, opacity 250ms ease;
+  touch-action: none;
 }
 
-.image-modal.is-open .image-modal_content {
+.imageModal.is-open .imageModalContent {
   opacity: 1;
 }
 
-.image-modal_content img {
+.imageModalContent img {
   display: block;
   width: auto;
   height: auto;
   max-width: 90vw;
   max-height: 90vh;
   object-fit: contain;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
-.image-modal_caption {
+.imageModalCaption {
   position: fixed;
   left: 1rem;
   right: 0;
@@ -552,11 +636,9 @@ body {
   font-family: 'Neris', sans-serif;
   color: #f5f5f5;
   pointer-events: none;
-  /* clicks go through to image/arrows */
-
 }
 
-.image-modal.is-installation .image-modal_caption {
+.imageModal.is-installation .imageModalCaption {
   position: absolute;
   left: 0;
   right: 0;
@@ -567,7 +649,7 @@ body {
   pointer-events: none;
 }
 
-.image-modal_caption-text {
+.imageModalCaptionText {
   max-width: 80vw;
   font-size: 1.0rem;
   line-height: 1.5;
@@ -575,14 +657,14 @@ body {
 }
 
 
-.modal-arrow {
+.modalArrow {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   color: #9c9c9c;
-  font-size: 4rem;
+  font-size: 2rem;
   cursor: pointer;
   padding: 0 0.3rem;
   line-height: 1;
@@ -590,19 +672,19 @@ body {
   z-index: 1100;
 }
 
-.modal-arrow-left {
+.modalArrowLeft {
   left: 0.4rem;
 }
 
-.modal-arrow-right {
+.modalArrowRight {
   right: 0.4rem;
 }
 
-.modal-arrow:hover {
+.modalArrow:hover {
   color: #c3ff4a;
 }
 
-.image-modal_close {
+.imageModalClose {
   position: fixed;
   top: 1rem;
   right: 1rem;
@@ -616,7 +698,7 @@ body {
 
 /* Next and previous project buttons */
 
-.project-nav{
+.projectNav {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -624,72 +706,144 @@ body {
   padding-bottom: 2rem;
 }
 
-.project-nav-btn{
+.projectNavBtn {
   background: none;
-  border: 1px solid #9c9c9c;
-  border-radius: 0.5rem;
+  border: none;
+  /*  border: 1px solid #9c9c9c;
+  border-radius: 0.5rem;*/
   color: #9c9c9c;
   padding: 0.7rem 1rem;
   font: inherit;
+  font-weight: 300;
+  font-size: 50px;
   letter-spacing: 0.07em;
   cursor: pointer;
 }
 
-.project-nav-btn:hover{
+.projectNavBtn:enabled:hover {
   color: #c3ff4a;
   border-color: #c3ff4a;
 }
 
-.project-nav-btn:disabled{
+.projectNavBtn:disabled {
   opacity: 0.35;
   cursor: default;
+  pointer-events: none;
 }
 
-/* Responsive tweaks 
+/* Responsive tweaks */
 
 @media (max-width: 900px) {
-  .works-wrapper {
+
+  .worksWrapper {
     flex-direction: column;
   }
 
-  .works-left {
+  .hamburgerToggleFixed {
+    top: 1.5rem;
+    left: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .homeIcon {
+    top: 1rem;
+    left: 3.5rem;
+  }
+
+  .homeIconSVG {
+    height: 35px;
+    width: 35px;
+    stroke-width: 1.;
+  }
+
+  .projectTitleBar {
+    top: 1.2rem;
+    padding: 0 1rem 0 4.5rem;
+  }
+
+
+  .projectTitle {
+    font-size: 1.2rem;
+  }
+
+  .projectTitleSeparator {
+    height: 1px;
+  }
+
+  .projectLink,
+  .categoryLink {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .projectMain {
+    padding: 0 1rem 0;
+    gap: 1.5rem;
+  }
+
+  .slideshowContainer {
+    height: auto;
+  }
+
+  .slidesTrack {
+    height: auto;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .slidesTrack img {
+    flex: 0 0 100%;
     width: 100%;
-    padding: 1.8rem 1.6rem 1.2rem;
-  }
-
-  .project-details {
-    padding: 0 1.6rem 2rem;
-  }
-
-  .project-title-bar {
-    padding: 1.2rem 0 1rem;
-    margin-left: 0;
-  }
-
-  .project-main {
-    padding: 1.5rem 0 0;
-  }
-
-  .slides-track img {
+    max-width: 100%;
+    height: auto;
     border-width: 6px;
   }
+
+  .slideshowDots {
+    margin-top: 0;
+  }
+
+  .slideshowDot {
+    height: 6px;
+    width: 6px;
+  }
+
+  .videoInlay {
+    padding-top: 1rem;
+  }
+
+  .videoSeparator,
+  .installationSeparator {
+    height: 1px;
+    margin-top: 1rem;
+  }
+
+  .projectImgGrid,
+  .installationImgGrid {
+    padding-top: 2rem;
+    ;
+  }
+
+  .projectNav {
+    padding-top: 0;
+  }
+
+  .projectNavBtn {
+    font-size: 40px;
+  }
+
+  .modalArrow {
+    font-size: 1.5rem;
+  }
+
+  .imageModal.is-installation .imageModalCaption {
+    position: fixed;
+    left: 1rem;
+    right: 0;
+    bottom: 1.5rem;
+    padding: 1.2rem 1.6rem;
+    font-family: 'Neris', sans-serif;
+    color: #f5f5f5;
+    pointer-events: none;
+  }
 }
-
-@media (max-width: 600px) {
-  .top-bar {
-    margin-bottom: 1.6rem;
-  }
-
-  .works-label {
-    font-size: 1.1rem;
-  }
-
-  .project-title {
-    font-size: 1.3rem;
-  }
-
-  .project-text {
-    font-size: 0.9rem;
-  }
-}
-  */

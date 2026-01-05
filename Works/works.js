@@ -2,49 +2,58 @@ let allProjects;
 let currentProjectId = null;
 
 let modalImageIndex = 0;
+let modalImageList = [];
 let modalWorkList = [];
 let modalInstList = [];
 let modalScopeList = [];
 let modalScopeIndex = 0;
+let __modalAnimating = false;
 
 let slideshowTimer = null;
-
+let slideshowAbort = null;
 
 function toggleLeftPanel() {
-    const hamburgerBtn = document.getElementById('hamburger-toggle');
-    const leftPanel = document.querySelector('.works-left');
-    const leftBg = document.querySelector('.left-panel-bg');
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const leftPanel = document.querySelector('.worksLeft');
+    const leftBg = document.querySelector('.leftPanelBg');
+    const homeIcon = document.getElementById('homeIcon');
+
     if (!hamburgerBtn || !leftPanel) return;
 
     leftPanel.classList.toggle('closed');
     hamburgerBtn.classList.toggle('open');
 
-    if (leftBg) leftBg.classList.toggle('is-visible', !leftPanel.classList.contains('closed'));
+    const isOpen = !leftPanel.classList.contains('closed');
+
+    if (leftBg) leftBg.classList.toggle('is-visible', isOpen);
+    if (homeIcon) homeIcon.hidden = !isOpen;   // visible only when open
 }
 
 
-const prevBtn = document.getElementById('slide-prev');
-const nextBtn = document.getElementById('slide-next');
-const hamburgerBtn = document.getElementById('hamburger-toggle');
-const leftPanel = document.querySelector('.works-left');
+const prevBtn = document.getElementById('slidePrev');
+const nextBtn = document.getElementById('slideNext');
+const hamburgerBtn = document.getElementById('hamburgerToggle');
+const leftPanel = document.querySelector('.worksLeft');
+const homeIcon = document.getElementById('homeIcon');
 
 
 function renderProject(project) {
     // 1) Title
-    const titleEl = document.getElementById("project-title");
+    const titleEl = document.getElementById("projectTitle");
     titleEl.textContent = `${project.title} (${project.date})`;
+    requestAnimationFrame(syncTopBarFade);
 
     // 2) Slideshow track
-    const track = document.getElementById("slides-track");
+    const track = document.getElementById("slidesTrack");
     track.innerHTML = "";
 
     // 3) Grids
-    const workGrid = document.getElementById("project-grid-images");
+    const workGrid = document.getElementById("projectGridImages");
     if (workGrid) workGrid.innerHTML = "";
 
-    const instSection = document.getElementById("installation-img-grid");
-    const instSeparator = document.getElementById("installation-separator");
-    const instGrid = document.getElementById("installation-grid-images");
+    const instSection = document.getElementById("installationImgGrid");
+    const instSeparator = document.getElementById("installationSeparator");
+    const instGrid = document.getElementById("installationGridImages");
     const rawInst = project.installation_images ?? [];
     const hasInst =
         Array.isArray(rawInst) &&
@@ -119,7 +128,7 @@ function renderProject(project) {
     }
 
     // 8) Description
-    const textEl = document.getElementById("project-text");
+    const textEl = document.getElementById("projectText");
     textEl.innerHTML = "";
     (project.description ?? []).forEach(par => {
         const p = document.createElement("p");
@@ -128,8 +137,8 @@ function renderProject(project) {
     });
 
     // 9)
-    const videoSection = document.getElementById("video-inlay");
-    const iframe = document.getElementById("project-video-iframe");
+    const videoSection = document.getElementById("videoInlay");
+    const iframe = document.getElementById("projectVideoiframe");
     const embedUrl = toYouTubeEmbedUrl(project.video_link);
     if (videoSection && iframe && embedUrl) {
         iframe.src = embedUrl;
@@ -151,8 +160,8 @@ function showModalImageAt(index) {
     modalScopeIndex = (index + total) % total;
     const item = modalScopeList[modalScopeIndex];
 
-    const imgEl = document.getElementById("image-modal_img");
-    const captionEl = document.getElementById("image-modal_caption");
+    const imgEl = document.getElementById("imageModalImg");
+    const captionEl = document.getElementById("imageModalCaption");
 
     imgEl.src = item.src;
 
@@ -161,13 +170,13 @@ function showModalImageAt(index) {
     } else {
         captionEl.innerHTML = item.label; // or put extra installation fields here later
     }
-    const modal = document.getElementById("image-modal");
+    const modal = document.getElementById("imageModal");
     modal.classList.toggle("is-installation", item.kind === "installation");
 }
 
 // Opens the modal at a given index
 function openImageModal(globalIndex) {
-    const modal = document.getElementById("image-modal");
+    const modal = document.getElementById("imageModal");
     const clicked = modalImageList[globalIndex];
 
     if (!clicked) return;
@@ -185,85 +194,125 @@ function openImageModal(globalIndex) {
 }
 
 
-function showPrevModalImage() { showModalImageAt(modalScopeIndex - 1); }
+function animateModalChange(delta) {
+    if (__modalAnimating) return;
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("imageModalImg");
+    if (!modal || !img || !modal.classList.contains("is-open")) return;
 
-function showNextModalImage() { showModalImageAt(modalScopeIndex + 1); }
+    __modalAnimating = true;
+
+    // delta: +1 = next, -1 = prev
+    // next => slide current image to LEFT; prev => slide to RIGHT
+    const dir = (delta > 0) ? -1 : 1;
+    const off = dir * Math.max(260, window.innerWidth * 0.35);
+
+    // Phase 1: slide + fade OUT current image
+    img.classList.remove("is-dragging");
+    img.style.transform = `translateX(${off}px)`;
+    img.style.opacity = "0";
+
+    const onOutDone = (e) => {
+        if (e.propertyName !== "transform") return;
+        img.removeEventListener("transitionend", onOutDone);
+
+        // Update index + swap src/caption via existing logic
+        showModalImageAt(modalScopeIndex + delta); // your function wraps index [file:350]
+
+        // Phase 2: snap back to center invisibly, then fade IN
+        img.style.transition = "none";
+        img.style.transform = "translateX(0px)";
+        img.style.opacity = "0";
+
+        // force style flush, then restore transition + fade in
+        void img.offsetHeight;
+        img.style.transition = ""; // back to CSS rule
+        requestAnimationFrame(() => {
+            img.style.opacity = "1";
+            __modalAnimating = false;
+        });
+    };
+
+    img.addEventListener("transitionend", onOutDone);
+}
+
+function showPrevModalImage() { animateModalChange(-1); }
+function showNextModalImage() { animateModalChange(1); }
+
 
 function closeImageModal() {
-    const modal = document.getElementById('image-modal');
-    const imgEl = document.getElementById('image-modal_img');
+    const modal = document.getElementById('imageModal');
+    const imgEl = document.getElementById('imageModalImg');
 
     modal.classList.remove('is-open');
     imgEl.src = '';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('image-modal');
-    const closeBtn = document.querySelector('.image-modal_close');
-    const backdrop = document.querySelector('.image-modal_backdrop');
-    const leftArrow = document.querySelector('.modal-arrow-left');
-    const rightArrow = document.querySelector('.modal-arrow-right');
-
-    if (closeBtn) closeBtn.addEventListener('click', closeImageModal);
-    if (backdrop) backdrop.addEventListener('click', closeImageModal);
-    if (leftArrow) leftArrow.addEventListener('click', showPrevModalImage);
-    if (rightArrow) rightArrow.addEventListener('click', showNextModalImage);
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeImageModal();
-        if (e.key === 'ArrowLeft') showPrevModalImage();
-        if (e.key === 'ArrowRight') showNextModalImage();
-    });
-    const hamburgerBtn = document.getElementById('hamburger-toggle');
-    const leftPanel = document.querySelector('.works-left');
-    if (hamburgerBtn) {
-        hamburgerBtn.addEventListener('click', toggleLeftPanel);
-    }
-    document.addEventListener('click', (e) => {
-        if (hamburgerBtn && leftPanel && !leftPanel.contains(e.target) && !hamburgerBtn.contains(e.target) && !leftPanel.classList.contains('closed')) {
-            toggleLeftPanel();
-        }
-    });
-});
-
-
 function initSlideshow(totalImages) {
-    const track = document.getElementById('slides-track');
-    const slides = Array.from(track.children);      // image1..imageN
-    const dotsContainer = document.getElementById('slideshow-dots');
-    const prevBtn = document.getElementById('slide-prev');
-    const nextBtn = document.getElementById('slide-next');
+    // Clean up any previous slideshow listeners (happens when switching projects)
+    if (slideshowAbort) slideshowAbort.abort();
+    slideshowAbort = new AbortController();
+    const { signal } = slideshowAbort;
 
-    const gap = parseFloat(getComputedStyle(track).gap) || 32;  // px gap from CSS
-    const states = totalImages;                                  // one state per image
+    const track = document.getElementById('slidesTrack');
+    if (!track) return;
 
-    let current = 0;                                             // 0..N‑1 (image1 at 0)
-    let offsets = [];                                            // offsets[i] for image i
+    const viewport = track.parentElement; // .slideshowContainer
+    const slides = Array.from(track.children);
+    if (!slides.length) return;
+
+    const dotsContainer = document.getElementById('slideshowDots');
+    const prevBtn = document.getElementById('slidePrev');
+    const nextBtn = document.getElementById('slideNext');
+
+    const gap = parseFloat(getComputedStyle(track).gap) || 32;
+    const states = totalImages;
+
+    let current = 0;
+    let offsets = [];
     let dots = [];
 
-    // ----- measure slide widths and build offsets -----
+    // ---- measurement ----
     function measure() {
         const widths = slides.map(slide => slide.getBoundingClientRect().width);
         offsets = [];
         let acc = 0;
         widths.forEach((w, i) => {
-            offsets[i] = acc;               // x-position where image i starts
+            offsets[i] = acc;
             acc += w + gap;
         });
     }
 
+    // ---- navigation ----
+    function setActiveDot(i) {
+        dots.forEach((dot, idx) => dot.classList.toggle('is-active', idx === i));
+    }
+
     function goToState(i) {
-        // wrap index 0..N-1
+        if (!offsets.length) return;
         current = (i + states) % states;
-        const offsetPx = -offsets[current];
-        track.style.transform = `translateX(${offsetPx}px)`;
+        track.style.transform = `translateX(${-offsets[current]}px)`;
         setActiveDot(current);
     }
 
-    // Dragging slideshow
-    const viewport = track.parentElement; // .slideshow-container
+    function buildDots() {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        dots = [];
 
-    // Ensure it exists once (safe even if re-run)
+        for (let i = 0; i < states; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'slideshowDot' + (i === 0 ? ' is-active' : '');
+            dot.addEventListener('click', () => {
+                if (slideshowTimer) { clearInterval(slideshowTimer); slideshowTimer = null; }
+                goToState(i);
+            }, { signal });
+            dotsContainer.appendChild(dot);
+            dots.push(dot);
+        }
+    }
+
+    // ---- drag/swipe (attached ONCE per init) ----
     window.__slideshowSuppressClick = window.__slideshowSuppressClick ?? false;
 
     let isDown = false;
@@ -271,13 +320,11 @@ function initSlideshow(totalImages) {
     let startX = 0;
     let startTranslate = 0;
     let activePointerId = null;
-    let prevTransition = "";
-
     const DRAG_THRESHOLD = 10;
 
     function getCurrentTranslatePx() {
         const t = getComputedStyle(track).transform;
-        if (!t || t === "none") return 0;
+        if (!t || t === 'none') return 0;
         return new DOMMatrixReadOnly(t).m41;
     }
 
@@ -285,186 +332,121 @@ function initSlideshow(totalImages) {
         track.style.transform = `translateX(${x}px)`;
     }
 
-    // Uses your existing offsets[] + goToState()
-    function snapToNearest(x) {
-        // x is the translateX value (negative means moved left)
-        // Find nearest state by comparing -x to offsets[]
+    function nearestIndexForTranslate(x) {
         const pos = -x;
-
         let best = 0;
         let bestDist = Infinity;
-
         for (let i = 0; i < offsets.length; i++) {
             const d = Math.abs(offsets[i] - pos);
-            if (d < bestDist) {
-                bestDist = d;
-                best = i;
-            }
+            if (d < bestDist) { bestDist = d; best = i; }
         }
-
-        goToState(best);
+        return best;
     }
 
-    viewport.addEventListener("pointerdown", (e) => {
-        if (e.pointerType === "mouse" && e.button !== 0) return;
+    function onDown(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
 
         isDown = true;
         isDragging = false;
-
-        // Clear any leftover suppression from a previous gesture.
-        // (Still only *sets true* after a real drag begins.)
         window.__slideshowSuppressClick = false;
 
         activePointerId = e.pointerId;
         startX = e.clientX;
         startTranslate = getCurrentTranslatePx();
-    });
+    }
 
-    viewport.addEventListener(
-        "pointermove",
-        (e) => {
-            if (!isDown || e.pointerId !== activePointerId) return;
+    function onMove(e) {
+        if (!isDown || e.pointerId !== activePointerId) return;
 
-            const dx = e.clientX - startX;
+        const dx = e.clientX - startX;
 
-            // Promote to "dragging" only after threshold
-            if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
-                isDragging = true;
+        if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
+            isDragging = true;
+            window.__slideshowSuppressClick = true;
 
-                // Suppress click ONLY after successful drag trigger
-                window.__slideshowSuppressClick = true;
+            viewport.classList.add('is-dragging');
+            track.classList.add('is-dragging'); // disables transition via CSS
 
-                // Make drag feel direct (no easing while moving)
-                prevTransition = track.style.transition;
-                track.style.transition = "none";
+            viewport.setPointerCapture(activePointerId);
 
-                viewport.classList.add("is-dragging");
+            if (slideshowTimer) { clearInterval(slideshowTimer); slideshowTimer = null; }
+        }
 
-                // Capture only now so taps still behave like clicks
-                viewport.setPointerCapture(activePointerId);
+        if (!isDragging) return;
 
-                if (slideshowTimer) {
-                    clearInterval(slideshowTimer);
-                    slideshowTimer = null;
-                }
-            }
+        e.preventDefault();
+        setTranslatePx(startTranslate + dx);
+    }
 
-            if (!isDragging) return;
-
-            e.preventDefault();
-            setTranslatePx(startTranslate + dx);
-        },
-        { passive: false }
-    );
-
-    function end(e) {
+    function onUp(e) {
         if (!isDown || e.pointerId !== activePointerId) return;
 
         isDown = false;
 
         if (isDragging) {
             const dx = e.clientX - startX;
-            snapToNearest(startTranslate + dx);
+            const finalX = startTranslate + dx;
+            const best = nearestIndexForTranslate(finalX);
 
-            viewport.classList.remove("is-dragging");
-            track.style.transition = prevTransition || "";
+            viewport.classList.remove('is-dragging');
+            track.classList.remove('is-dragging'); // transition back ON
 
-            try {
-                viewport.releasePointerCapture(activePointerId);
-            } catch (_) { }
+            // Important: apply snapped state after transition is back
+            requestAnimationFrame(() => goToState(best));
 
-            // Only reset suppression if a drag happened
-            setTimeout(() => {
-                window.__slideshowSuppressClick = false;
-            }, 50);
+            try { viewport.releasePointerCapture(activePointerId); } catch (_) { }
+            setTimeout(() => { window.__slideshowSuppressClick = false; }, 50);
         }
 
         activePointerId = null;
         isDragging = false;
     }
 
-    viewport.addEventListener("pointerup", end);
-    viewport.addEventListener("pointercancel", end);
+    viewport.addEventListener('pointerdown', onDown, { signal });
+    viewport.addEventListener('pointermove', onMove, { signal, passive: false });
+    viewport.addEventListener('pointerup', onUp, { signal });
+    viewport.addEventListener('pointercancel', onUp, { signal });
 
+    // ---- arrows + auto ----
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+        if (slideshowTimer) { clearInterval(slideshowTimer); slideshowTimer = null; }
+        goToState(current - 1);
+    }, { signal });
 
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (slideshowTimer) { clearInterval(slideshowTimer); slideshowTimer = null; }
+        goToState(current + 1);
+    }, { signal });
 
-    // ----- dots -----
-    function buildDots() {
-        dotsContainer.innerHTML = '';
-        dots = [];
-        for (let i = 0; i < states; i++) {
-            const dot = document.createElement('span');
-            dot.className = 'slideshow-dot' + (i === 0 ? ' is-active' : '');
-            dotsContainer.appendChild(dot);
-            dots.push(dot);
-        }
-    }
-
-    function setActiveDot(i) {
-        dots.forEach((dot, idx) => {
-            dot.classList.toggle('is-active', idx === i);
-        });
-    }
-
-    // ----- controls + auto-advance -----
     function setup() {
         measure();
         buildDots();
-        goToState(0);                      // image1 at position1
+        goToState(0);
 
-        if (slideshowTimer) {
-            clearInterval(slideshowTimer);
-            slideshowTimer = null;
-        }
-        slideshowTimer = setInterval(() => {
-            goToState(current + 1);          // next image as position1
-        }, 5000);
-
-        dots.forEach((dot, i) => {
-            dot.onclick = () => {
-                if (slideshowTimer) {
-                    clearInterval(slideshowTimer);
-                    slideshowTimer = null;
-                }
-                goToState(i);
-            };
-        });
-
-        if (prevBtn) {
-            prevBtn.onclick = () => {
-                if (slideshowTimer) {
-                    clearInterval(slideshowTimer);
-                    slideshowTimer = null;
-                }
-                goToState(current - 1);
-            };
-        }
-
-        if (nextBtn) {
-            nextBtn.onclick = () => {
-                if (slideshowTimer) {
-                    clearInterval(slideshowTimer);
-                    slideshowTimer = null;
-                }
-                goToState(current + 1);
-            };
-        }
+        if (slideshowTimer) clearInterval(slideshowTimer);
+        slideshowTimer = setInterval(() => goToState(current + 1), 5000);
     }
 
-    // ----- wait for images to load, then measure+setup -----
+    // wait for images to load (same idea as your current code)
     let loaded = 0;
     slides.forEach(img => {
         if (img.complete) {
             loaded++;
             if (loaded === slides.length) setup();
         } else {
-            img.onload = () => {
+            img.addEventListener('load', () => {
                 loaded++;
                 if (loaded === slides.length) setup();
-            };
+            }, { signal, once: true });
         }
     });
     if (loaded === slides.length) setup();
+
+    // keep offsets correct on resize
+    window.addEventListener('resize', () => {
+        measure();
+        goToState(current);
+    }, { signal });
 }
 
 
@@ -472,7 +454,7 @@ function setCurrentProject(id) {
     const project = allProjects.find(p => p.id === id);
     if (!project) return;
 
-    const details = document.querySelector('.project-details');
+    const details = document.querySelector('.projectDetails');
 
     // start fade out
     details.classList.add('is-fading');
@@ -483,7 +465,7 @@ function setCurrentProject(id) {
         renderProject(project);   // updates title, slideshow, text
 
         // update active class on links
-        const links = document.querySelectorAll('.project-link');
+        const links = document.querySelectorAll('.projectLink');
         links.forEach(link => {
             const thisId = new URLSearchParams(link.href.split('?')[1]).get('id');
             link.classList.toggle('is-active', thisId === id);
@@ -493,14 +475,14 @@ function setCurrentProject(id) {
         const url = new URL(window.location);
         url.searchParams.set('id', id);
         window.history.pushState({}, '', url);
-        updateProjectNavButtons() 
+        updateProjectNavButtons()
         // fade back in
         requestAnimationFrame(() => {
             details.classList.remove('is-fading');
         });
     }, 250); // same as CSS transition duration
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    updateProjectNavButtons() 
+    updateProjectNavButtons()
 }
 
 
@@ -514,14 +496,14 @@ async function loadProjects() {
     const idFromUrl = params.get('id');
     const initialProject = projects.find(p => p.id === idFromUrl) || projects[0];
 
-    const menu = document.getElementById('project-menu');
+    const menu = document.getElementById('projectMenu');
     menu.innerHTML = '';
 
     projects.forEach(project => {
         const link = document.createElement('a');
         link.href = `?id=${project.id}`;
         link.textContent = project.title;
-        link.className = 'project-link';
+        link.className = 'projectLink';
 
         link.addEventListener('click', (event) => {
             event.preventDefault();
@@ -533,12 +515,45 @@ async function loadProjects() {
     });
 
     setCurrentProject(initialProject.id);
+    syncLeftPanelBgWidth()
+    maybeRunMenuIntro();
+}
+
+function maybeRunMenuIntro() {
+    const url = new URL(window.location.href);
+
+    // Only if user arrived via a Home link that added intro=1
+    if (url.searchParams.get('intro') !== '1') return;
+
+    // Remove intro param so refresh/back won’t replay it
+    url.searchParams.delete('intro');
+    window.history.replaceState({}, '', url);
+
+    openLeftPanel();
+
+    let timer = setTimeout(() => {
+        closeLeftPanel();
+    }, 2000);
+
+    // If user interacts, cancel the auto-close
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const leftPanel = document.querySelector('.worksLeft');
+
+    /*const cancel = () => {
+        clearTimeout(timer);
+        timer = null;
+        if (hamburgerBtn) hamburgerBtn.removeEventListener('pointerdown', cancel);
+        if (leftPanel) leftPanel.removeEventListener('pointerdown', cancel);
+    };*/
+
+    if (hamburgerBtn) hamburgerBtn.addEventListener('pointerdown', cancel, { once: true });
+    if (leftPanel) leftPanel.addEventListener('pointerdown', cancel, { once: true });
 }
 
 // Project navigation buttons at bottom
 document.addEventListener("DOMContentLoaded", () => {
-    const prevBtn = document.getElementById("project-prev-project");
-    const nextBtn = document.getElementById("project-next-project");
+    const prevBtn = document.getElementById("projectPrevProject");
+    const nextBtn = document.getElementById("projectNextProject");
 
     if (prevBtn) prevBtn.addEventListener("click", () => goToAdjacentProject(-1));
     if (nextBtn) nextBtn.addEventListener("click", () => goToAdjacentProject(1));
@@ -558,8 +573,8 @@ function goToAdjacentProject(delta) {
 }
 
 function updateProjectNavButtons() {
-    const prevBtn = document.getElementById("project-prev-project");
-    const nextBtn = document.getElementById("project-next-project");
+    const prevBtn = document.getElementById("projectPrevProject");
+    const nextBtn = document.getElementById("projectNextProject");
     if (!prevBtn || !nextBtn) return;
 
     if (!Array.isArray(allProjects) || !allProjects.length || !currentProjectId) {
@@ -573,6 +588,8 @@ function updateProjectNavButtons() {
     nextBtn.disabled = idx === -1 || idx >= allProjects.length - 1;
 }
 
+
+//Helper functions
 function toYouTubeEmbedUrl(url) {
     if (!url) return null;
 
@@ -592,16 +609,181 @@ function toYouTubeEmbedUrl(url) {
 }
 
 function closeLeftPanel() {
-    const hamburgerBtn = document.getElementById('hamburger-toggle');
-    const leftPanel = document.querySelector('.works-left');
-    const leftBg = document.querySelector('.left-panel-bg');
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const leftPanel = document.querySelector('.worksLeft');
+    const leftBg = document.querySelector('.leftPanelBg');
+    const homeIcon = document.getElementById('homeIcon');
+
     if (!hamburgerBtn || !leftPanel) return;
 
-    leftPanel.classList.add('closed');        // force closed
-    hamburgerBtn.classList.remove('open');    // force hamburger reset
+    leftPanel.classList.add('closed');
+    hamburgerBtn.classList.remove('open');
     if (leftBg) leftBg.classList.remove('is-visible');
+    if (homeIcon) homeIcon.hidden = true;
+}
+
+function openLeftPanel() {
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const leftPanel = document.querySelector('.worksLeft');
+    const leftBg = document.querySelector('.leftPanelBg');
+    const homeIcon = document.getElementById('homeIcon');
+
+    if (!hamburgerBtn || !leftPanel) return;
+
+    leftPanel.classList.remove('closed');
+    hamburgerBtn.classList.add('open');
+    if (leftBg) leftBg.classList.add('is-visible');
+    if (homeIcon) homeIcon.hidden = false;
+    syncLeftPanelBgWidth()
 }
 
 
+function syncLeftPanelBgWidth() {
+    const panel = document.querySelector('.worksLeft');
+    const bg = document.querySelector('.leftPanelBg');
+    if (!panel || !bg) return;
 
+    const panelW = panel.getBoundingClientRect().width;
+    const vw = window.visualViewport?.width ?? window.innerWidth;
+
+    const isMobile = vw <= 900; // match your CSS breakpoint
+    const w = isMobile ? 1000 : panelW;
+
+    bg.style.setProperty('--panel-w', `${w}px`);
+}
+
+function syncTopBarFade() {
+    const sep = document.querySelector('.projectTitleSeparator');
+    const topBar = document.querySelector('.topBar');
+    if (!sep || !topBar) return;
+
+    // bottom is viewport Y coordinate of the separator’s bottom edge
+    const fadeStartPx = sep.getBoundingClientRect().bottom; // px [web:12]
+
+    const extraSolidPadding = 8; // set e.g. 8/12 if you want space after the line
+    topBar.style.setProperty('--panel-h', `${Math.ceil(fadeStartPx + extraSolidPadding)}px`);
+}
+
+
+window.addEventListener('resize', syncLeftPanelBgWidth);
+
+//Event Listeners
+window.addEventListener('resize', syncTopBarFade, syncLeftPanelBgWidth);
 document.addEventListener('DOMContentLoaded', loadProjects);
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('imageModal');
+    const modalContent = document.querySelector(".imageModalContent");
+    const swipeEl = document.getElementById("imageModalImg");
+    const closeBtn = document.querySelector('.imageModalClose');
+    const backdrop = document.querySelector('.imageModalBackdrop');
+    const leftArrow = document.querySelector('.modalArrowLeft');
+    const rightArrow = document.querySelector('.modalArrowRight');
+    const homeIcon = document.getElementById('homeIcon');
+    if (closeBtn) closeBtn.addEventListener('click', closeImageModal);
+    if (backdrop) backdrop.addEventListener('click', closeImageModal);
+    if (leftArrow) leftArrow.addEventListener('click', showPrevModalImage);
+    if (rightArrow) rightArrow.addEventListener('click', showNextModalImage);
+    swipeEl.draggable = false;
+    swipeEl.addEventListener("dragstart", (e) => e.preventDefault());
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeImageModal();
+        if (e.key === 'ArrowLeft') showPrevModalImage();
+        if (e.key === 'ArrowRight') showNextModalImage();
+    });
+    const hamburgerBtn = document.getElementById('hamburgerToggle');
+    const leftPanel = document.querySelector('.worksLeft');
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', toggleLeftPanel);
+    }
+    document.addEventListener('click', (e) => {
+        if (hamburgerBtn && leftPanel && !leftPanel.contains(e.target) && !hamburgerBtn.contains(e.target) && !leftPanel.classList.contains('closed')) {
+            toggleLeftPanel();
+        }
+    });
+    if (homeIcon) {
+        homeIcon.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = "../";
+        });
+    }
+
+    if (modal && swipeEl) {
+        let isDown = false;
+        let startX = 0;
+        let pointerId = null;
+
+        const SWIPE_PX = 80;           // trigger next/prev
+        const MAX_PULL = 500;          // limit how far it follows
+        const OFFSCREEN = () => Math.max(240, window.innerWidth * 0.35);
+
+        const setX = (x) => { swipeEl.style.transform = `translateX(${x}px)`; };
+        const setFade = (x) => { swipeEl.style.opacity = String(1 - Math.min(0.35, Math.abs(x) / 700)); };
+
+        // Make sure native drag is disabled (you already did this)
+        swipeEl.draggable = false;
+        swipeEl.addEventListener("dragstart", (e) => e.preventDefault());
+
+        swipeEl.addEventListener("pointerdown", (e) => {
+            if (e.pointerType === "mouse" && e.button !== 0) return;
+            if (!modal.classList.contains("is-open")) return;
+
+            isDown = true;
+            pointerId = e.pointerId;
+            startX = e.clientX;
+
+            swipeEl.classList.add("is-dragging");
+            try { swipeEl.setPointerCapture(pointerId); } catch (_) { }
+        });
+
+        swipeEl.addEventListener("pointermove", (e) => {
+            if (!isDown || e.pointerId !== pointerId) return;
+
+            const dx = e.clientX - startX;
+            const clamped = Math.max(-MAX_PULL, Math.min(MAX_PULL, dx));
+
+            setX(clamped);
+            setFade(clamped);
+            e.preventDefault();
+        }, { passive: false });
+
+        function finish(e) {
+            if (!isDown || e.pointerId !== pointerId) return;
+
+            isDown = false;
+            try { swipeEl.releasePointerCapture(pointerId); } catch (_) { }
+            pointerId = null;
+
+            // compute current dx from transform-less state (use last pointer position)
+            const dx = e.clientX - startX;
+
+            swipeEl.classList.remove("is-dragging"); // re-enable CSS transition
+
+            // Snap decision
+            if (dx > SWIPE_PX) {
+                setX(OFFSCREEN());
+                setFade(OFFSCREEN());
+                setTimeout(() => {
+                    //swipeEl.style.transform = "translateX(5000px)";
+                    showPrevModalImage();
+                }, 10);
+
+            } else if (dx < -SWIPE_PX) {
+                setX(-OFFSCREEN());
+                setFade(-OFFSCREEN());
+                setTimeout(() => {
+                    //swipeEl.style.transform = "translateX(-5000px)";
+                    showNextModalImage();
+                }, 10);
+
+            } else {
+                // Not far enough: animate back to center
+                swipeEl.style.transform = "translateX(0px)";
+                swipeEl.style.opacity = "1";
+            }
+        }
+
+        swipeEl.addEventListener("pointerup", finish);
+        swipeEl.addEventListener("pointercancel", finish);
+    }
+
+});

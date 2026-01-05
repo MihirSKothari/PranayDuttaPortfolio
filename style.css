@@ -10,6 +10,9 @@
   font-weight: 300;
 }
 
+:root {
+  --bg-url: url("./BG2.jpg");
+}
 
 *,
 *::before,
@@ -41,11 +44,24 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background-image: url("./BG2.jpg");
+}
+
+
+.bgLayer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--bg-url);
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
+
 
 /* Extra dark overlay for readability */
 /*
@@ -92,18 +108,21 @@ body {
 }
 
 .hero-nav a:hover {
-  color: #b7c39d;
+  color: #c3ff4a;
 }
 
 /* Small screens */
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+
   .hero-nav {
     gap: 1.75rem;
     bottom: 15%;
-    font-size: 1.4rem;
+    font-size: 1.0rem;
   }
 
   .site-name {
     letter-spacing: 0.25em;
+    font-size: 1.7rem;
+    padding-bottom: 5rem;
   }
 }
