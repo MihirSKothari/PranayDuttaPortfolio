@@ -35,6 +35,10 @@
   padding: 0;
 }
 
+html {
+  scrollbar-gutter: stable
+}
+
 html,
 body {
   height: 100%;
@@ -44,7 +48,7 @@ body {
   color: #9c9c9c;
   background: #000;
   font-family: 'Neris', sans-serif;
-  background-image: url("../waves.jpg");
+  background-image: url("../BG2.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -58,59 +62,176 @@ body {
   display: flex;
 }
 
-.works-wrapper::before {
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8rem;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Masking layer (same bg as body) */
+.top-bar::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  mix-blend-mode: multiply;
+
+  background-image: url("../BG2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  /* optional: if you want it to fade out softly like your panel mask */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
 }
 
-/*===== LEFT SIDE =====*/
 
-.works-left {
-  position: sticky;
-  top:0;
-  height: 100vh;
-  width: 26%;
-  min-width: 230px;
-  padding: 2.5rem 2.5rem 2.8rem;
+/* Fixed top bar containing hamburger + project title */
+.project-title-bar {
+  position: fixed;
+  top: 2.5rem;
+  z-index: 60;
+  /* stays below left panel (100) */
+  padding: 0 2.8rem 1.4rem 6rem;
+  background: transparent;
+  width: 100%;
+}
+
+/* Fixed hamburger and title outside panel */
+.hamburger-toggle-fixed {
+  position: fixed;
+  top: 3rem;
+  /* Matches original padding */
+  left: 2.5rem;
+  /* Matches original padding */
+  z-index: 110;
+  /* Above menu z:100 */
   display: flex;
   flex-direction: column;
-  z-index:1;
-}
-
-.top-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 5rem;
-}
-
-.back-button {
-  display: inline-flex;
+  justify-content: space-around;
+  width: 2rem;
+  height: 1.5rem;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0;
   color: #9c9c9c;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Neris', sans-serif;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 2rem;
-  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.back-button:hover {
+.hamburger-toggle-fixed span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger-toggle-fixed:hover {
   color: #b7c39d;
+}
+
+.hamburger-toggle-fixed.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-toggle-fixed.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-toggle-fixed.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+
+.project-title {
+  font-weight: 300;
+  font-size: 1.4rem;
+}
+
+.project-title-separator {
+  width: 100%;
+  background-color: #9c9c9c;
+  height: 2px;
+  margin-top: 10px;
+}
+
+.video-separator {
+  width: 100%;
+  background-color: #9c9c9c;
+  height: 2px;
+}
+
+.installation-separator {
+  width: 100%;
+  background-color: #9c9c9c;
+  height: 2px;
+}
+
+/*===== LEFT PANEL =====*/
+
+/* NEW: Panel-only background overlay that fades in (does NOT slide) */
+.left-panel-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+
+  /* panel width + extra area for the fade */
+  width: 600px;
+
+  /* same image as body */
+  background-image: url('../BG2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  /* Fade effect (preferred): mask to transparent on the right */
+  -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+
+  z-index: 90;
+  /* between content (1) and panel (100) */
+  pointer-events: none;
+  /* never blocks clicks */
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.left-panel-bg.is-visible {
+  opacity: 1;
+}
+
+.works-left {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: fixed;
+  /* Changed from sticky for overlay */
+  left: 0;
+  top: 0;
+  z-index: 100;
+  width: 26%;
+  height: 100vh;
+  width: 26%;
+  min-width: 230px;
+  padding: 6rem 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.works-left.closed {
+  transform: translateX(-100%);
 }
 
 .works-label {
   font-family: 'Neris', sans-serif;
   font-weight: 300;
-  font-style: italic;
-  font-size: 2rem;
+  font-size: 1.4rem;
   letter-spacing: 0.12em;
 }
 
@@ -120,12 +241,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin-top: 2rem;
 }
 
 .project-link {
   display: block;
   font-weight: 100;
-  font-size: 1.4rem;
+  font-size: 1.0rem;
   color: #9c9c9c;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -155,7 +277,7 @@ body {
 .category-link {
   display: block;
   font-weight: 100;
-  font-size: 1.4rem;
+  font-size: 1.0rem;
   color: #9c9c9c;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -174,39 +296,22 @@ body {
 /*===== RIGHT SIDE =====*/
 .project-details {
   position: relative;
+  width: 100%;
+  margin-left: 0;
   z-index: 1;
   flex: 1;
-  padding: 2.5rem 2.8rem 2.8rem 0;
+  padding: 8rem 0 2.8rem 0;
   display: flex;
   flex-direction: column;
   opacity: 1;
-  transition: opacity 500ms ease;  /* soft fade */
+  transition: opacity 500ms ease;
+  /* soft fade */
 }
 
 .project-details.is-fading {
   opacity: 0;
 }
 
-/* Title bar */
-
-.project-title-bar {
-  padding: 0 2.8rem 1.4rem;
-  margin-left: 0.5rem;
-}
-
-.project-title {
-  font-weight: 300;
-  font-style: italic;
-  font-size: 2rem;
-}
-
-.project-title-separator {
-  width: 100%;
-  margin-top: 15px;
-  background-color: #9c9c9c;
-  height: 2px;
-
-}
 
 /* Main content */
 
@@ -218,14 +323,19 @@ body {
   gap: 2.5rem;
 }
 
-/* 6: slideshow container (two images visible) */
+/* 6: slideshow container */
 .slideshow-container {
   position: relative;
-  width: 100%;        /* fills right column, no extra */
+  width: 100%;
   overflow: hidden;
-  height: 380px;      /* fixed */
+  height: 500px;
+  touch-action: pan-y;
+  cursor: grab;
 }
 
+.slideshow-container.is-dragging {
+  cursor: grabbing;
+}
 
 .slide-arrow {
   position: absolute;
@@ -234,12 +344,12 @@ body {
   background: none;
   border: none;
   color: #9c9c9c;
-  font-size: 2.2rem;
+  font-size: 1.4rem;
   cursor: pointer;
   padding: 0 0.3rem;
   line-height: 1;
   transition: color 0.2s ease;
-  z-index:5;
+  z-index: 5;
 }
 
 .slide-arrow-left {
@@ -259,7 +369,9 @@ body {
   height: 100%;
   transition: transform 0.6s ease;
   gap: 2rem;
+  user-select: none;
 }
+
 
 
 .slides-track img {
@@ -269,6 +381,9 @@ body {
   flex: 0 0 auto;
   object-fit: contain;
   cursor: pointer;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: auto;
 }
 
 /*dots below slideshow*/
@@ -280,10 +395,10 @@ body {
 }
 
 .slideshow-dot {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  
+
   background: #9c9c9c70;
 }
 
@@ -298,26 +413,28 @@ body {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-weight: 100;
-  font-size: 1.3rem;
+  font-size: 1.0rem;
   line-height: 1.7;
   color: #9c9c9c
 }
 
-.project-text p + p {
-  margin-top: 1.2rem;   /* spacing between paragraphs */
+.project-text p+p {
+  margin-top: 1.2rem;
+  /* spacing between paragraphs */
 }
 
 /* Video inlay */
 .video-inlay {
   padding-top: 5rem;
-  width:100%;
+  width: 100%;
   height: auto;
 }
 
 .video-inlay-inner {
   position: relative;
   width: 100%;
-  padding-top: 56.25%;      /* 16:9 aspect ratio box */
+  padding-top: 56.25%;
+  /* 16:9 aspect ratio box */
   overflow: hidden;
 }
 
@@ -334,16 +451,39 @@ body {
   padding-top: 5rem;
 }
 
-.img-grid-images {
+.project-grid-images {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.2rem;
 }
 
-.img-grid-images img {
+.project-grid-images img {
   width: 100%;
   height: auto;
   object-fit: cover;
+  cursor: pointer;
+}
+
+.installation-img-grid {
+  padding-top: 5rem;
+}
+
+.installation-grid-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+
+.installation-grid-images img {
+  width: min(100%, 1100px);
+  /* 1100px is optional; remove if you want full width */
+  height: auto;
+  /* preserves aspect ratio */
+  object-fit: contain;
+  /* no cropping */
+  display: block;
   cursor: pointer;
 }
 
@@ -352,20 +492,33 @@ body {
 .image-modal {
   position: fixed;
   inset: 0;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 250ms ease, visibility 0s linear 250ms;
+  z-index: 1002;
 }
 
 .image-modal.is-open {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease, visibility 0s;
 }
 
 .image-modal_backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.image-modal.is-open .image-modal_backdrop {
+  opacity: 1;
 }
 
 .image-modal_content {
@@ -373,11 +526,17 @@ body {
   max-width: 90vw;
   max-height: 90vh;
   z-index: 1;
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 250ms ease;
+}
+
+.image-modal.is-open .image-modal_content {
+  opacity: 1;
 }
 
 .image-modal_content img {
   display: block;
-  width:auto;
+  width: auto;
   height: auto;
   max-width: 90vw;
   max-height: 90vh;
@@ -385,35 +544,39 @@ body {
 }
 
 .image-modal_caption {
+  position: fixed;
+  left: 1rem;
+  right: 0;
+  bottom: 1.5rem;
+  padding: 1.2rem 1.6rem;
+  font-family: 'Neris', sans-serif;
+  color: #f5f5f5;
+  pointer-events: none;
+  /* clicks go through to image/arrows */
+
+}
+
+.image-modal.is-installation .image-modal_caption {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 1.2rem 1.6rem;
   font-family: 'Neris', sans-serif;
-  font-style: italic;
   color: #f5f5f5;
-  pointer-events: none;        /* clicks go through to image/arrows */
-
-}.image-modal_caption-inner {
-  max-width: 80vw;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.image-modal_caption-title {
-  font-weight: 300;
-  font-size: 120%;
+  pointer-events: none;
 }
 
 .image-modal_caption-text {
+  max-width: 80vw;
+  font-size: 1.0rem;
+  line-height: 1.5;
   font-weight: 100;
-  opacity: 0.9;
 }
 
 
 .modal-arrow {
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -424,7 +587,7 @@ body {
   padding: 0 0.3rem;
   line-height: 1;
   transition: color 0.2s ease;
-  z-index:5;
+  z-index: 1100;
 }
 
 .modal-arrow-left {
@@ -440,17 +603,49 @@ body {
 }
 
 .image-modal_close {
-  position: absolute;
-  top: -1.8rem;
-  right: -1.8rem;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
-  color: #ffffff;
-  font-size: 2.4rem;
+  color: #9c9c9c;
+  font-size: 3rem;
   cursor: pointer;
 }
 
-/* Responsive tweaks */
+
+/* Next and previous project buttons */
+
+.project-nav{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+.project-nav-btn{
+  background: none;
+  border: 1px solid #9c9c9c;
+  border-radius: 0.5rem;
+  color: #9c9c9c;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+}
+
+.project-nav-btn:hover{
+  color: #c3ff4a;
+  border-color: #c3ff4a;
+}
+
+.project-nav-btn:disabled{
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Responsive tweaks 
 
 @media (max-width: 900px) {
   .works-wrapper {
@@ -497,3 +692,4 @@ body {
     font-size: 0.9rem;
   }
 }
+  */

@@ -8,19 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="works.js"></script>
 </head>
-
 <body>
     <div class="works-wrapper">
+
+        <div class="top-bar" aria-hidden="true"></div>
+        <button id="hamburger-toggle" class="hamburger-toggle-fixed" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <header class="project-title-bar">
+            <h1 class="project-title" id="project-title"></h1>
+            <div class="project-title-separator"></div>
+        </header>
+
         <!-- LEFT SIDE -->
-        <aside class="works-left">
-
-            <!-- Back button + WORKS label -->
-            <div class="top-bar">
-                <a href="../index.html" class="back-button">&lt;</a>
-                <div class="works-label">WORKS</div>
-            </div>
-
+        <div class="left-panel-bg" aria-hidden="true"></div>
+        <aside class="works-left closed">
             <!-- Projects list -->
+            <!--div class="works-label">WORKS</div-->
             <div class="projects-block">
                 <nav class="project-menu" id="project-menu">
                 </nav>            
@@ -39,12 +43,6 @@
         <!-- RIGHT SIDE -->
         <!-- All project details -->
         <div class="project-details">
-            <!-- Title bar -->
-            <header class="project-title-bar">
-                <h1 class="project-title" id="project-title"></h1>
-                <div class="project-title-separator"></div>
-            </header>
-
             <!-- Main content -->
             <main class="project-main">
                 <!-- 6: Slideshow container -->
@@ -54,22 +52,32 @@
                     <button class="slide-arrow slide-arrow-right" id="slide-next">&#10095;</button>
                 </section>
                 <div class="slideshow-dots" id="slideshow-dots"></div>
+                
                 <!-- Description text -->
                 <section class="project-text" id="project-text"></section>
-                <section class="video-inlay">
+                
+                <!-- Video -->
+                <section class="video-inlay" id="video-inlay" hidden>
                     <div class="video-inlay-inner">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Project video" frameborder="0"
+                        <iframe id="project-video-iframe" src="" title="Project video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen></iframe>
                     </div>
                 </section>
+                <div class="video-separator"></div>
+                <!-- Project images -->
                 <section class="project-img-grid" id="project-img-grid">
-                    <div class="img-grid-images" id="img-grid-images"></div>
+                    <div class="project-grid-images" id="project-grid-images"></div>
                 </section>
-                <section class="installation-img-grid" id="installation-img-grid"></section>
+                <div class="installation-separator" id="installation-separator" hidden></div>
+                <!-- Installation images -->
+                <section class="installation-img-grid" id="installation-img-grid" hidden>
+                    <div class="installation-grid-images" id="installation-grid-images"></div>
+                </section>
             </main>
         </div>
     </div>
+    
     <div id="image-modal" class="image-modal">
         <div class="image-modal_backdrop"></div>
         <div class="image-modal_content">
@@ -78,13 +86,15 @@
             <button class="modal-arrow modal-arrow-right" id="modal-next">&#10095;</button>
             <img id="image-modal_img" src="" alt="">
             <div class="image-modal_caption">
-                <div class="image-modal_caption-inner">
-                    <div class="image-modal_caption-title" id="image-modal_title">Title</div>
-                    <div class="image-modal_caption-text" id="image-modal_caption">Medium<br>Size<br>Year</div>
-                </div>
+                <div class="image-modal_caption-text" id="image-modal_caption"></div>
             </div>
         </div>
     </div>
+
+    <section class="project-nav" id="project-nav">
+        <button type="button" class="project-nav-btn" id="project-prev-project">← Previous project</button>
+        <button type="button" class="project-nav-btn" id="project-next-project">Next project →</button>
+    </section>
 
     </body>
     

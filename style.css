@@ -19,6 +19,8 @@
   padding: 0;
 }
 
+html{scrollbar-gutter: stable}
+
 html,
 body {
   height: 100%;
@@ -39,13 +41,14 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background-image: url("./waves.jpg");
+  background-image: url("./BG2.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 /* Extra dark overlay for readability */
-/*PDNOTE: added overlay to get 20% opacity, can remove it so that you are able to control the opacity of any background image yourself*/
+/*
 .hero::before {
   content: "";
   position: absolute;
@@ -53,7 +56,7 @@ body {
   background: rgba(0, 0, 0, 0.8);
   mix-blend-mode: multiply;
 }
-
+*/
 /* Make sure content sits above overlay */
 .hero-inner,
 .hero-nav {

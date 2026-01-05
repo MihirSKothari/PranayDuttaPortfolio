@@ -3,36 +3,187 @@
         "id": "proscenium",
         "title": "Proscenium",
         "date": "2025-ongoing",
-        "images": [
-            "Proscenium/1.jpg",
-            "Proscenium/2.jpg",
-            "Proscenium/3.jpg",
-            "Proscenium/4.jpg",
-            "Proscenium/5.jpg",
-            "Proscenium/6.jpg"
+        "work_images": [
+            {
+                "src": "proscenium/Work Images/1.jpg",
+                "title": "Proscenium I",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            },
+            {
+                "src": "proscenium/Work Images/2.jpg",
+                "title": "Proscenium II",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            },
+            {
+                "src": "proscenium/Work Images/3.jpg",
+                "title": "Proscenium III",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            },
+            {
+                "src": "proscenium/Work Images/4.jpg",
+                "title": "Proscenium IV",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            },
+            {
+                "src": "proscenium/Work Images/5.jpg",
+                "title": "Proscenium V",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            },
+            {
+                "src": "proscenium/Work Images/6.jpg",
+                "title": "Proscenium VI",
+                "medium": "Graphite and charcoal on paper",
+                "size": "18in x 24in",
+                "year": "2025"
+            }
         ],
         "description": [
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            "Staging the Landscape: On Facades, Fiction, and the Construction of Truth.",
+            "I have been thinking about how landscapes can be constructed, performed, and manipulated, both in visual culture and in everyday life. My interest lies in the use of facades to present a version of reality that often conceals what lies beneath. These are not just visual enhancements, but deliberate acts of image-making that serve specific purposes, often rooted in power, control, or persuasion. One example that shaped this line of thought occurred during the G20 Summit in India. In preparation for the arrival of international delegates, parts of the city were temporarily transformed. Slums were hidden behind fabricated structures, walls were freshly painted, and the roads connecting hotels to the venue were carefully curated to project an image of development. The goal was not only to beautify the city but to stage a narrative of progress intended for a foreign audience.",
+            "This act reminded me of the historical idea of the Potemkin village, linked to eighteenth-century Russia. These were reportedly fake settlements constructed to impress Empress Catherine II, creating the illusion of prosperity and control. Whether or not the story is entirely accurate, the metaphor remains powerful. It points to how architecture and surface-level visuals can be used to obscure, distract, or reinforce a particular version of events. This historical reference helped me draw connections between political staging and the language of theatre, cinema, and set design.",
+            "My work focuses on the idea of the staged landscape. I look at how artificial elements, designed to mimic nature, are crafted to simulate a sense of place. These materials are often nostalgic, intended to evoke familiarity or emotional connection, yet they are only stand-ins for the original. I became particularly interested in what happens when these scenic constructions are left empty. Without human presence, the illusion falters. The sets become cold and still; their artificiality more pronounced. These fragments begin to feel hollow and melancholic, as if they are holding space for something that is no longer there.",
+            "The drawings I produce aim to document this moment of collapse. Rather than hiding the construction, they reveal it. You can see the seams, the scaffolding, the lighting. Details that would usually be kept out of sight. These images do not attempt to convince the viewer of a complete fiction. Instead, they allow the viewer to observe how that fiction is assembled.",
+            "There is also a connection here to acts of preservation and museumization. Much like dioramas found in natural history museums, these staged landscapes freeze a version of reality in place - clean, composed, and removed from time. They are often built to evoke wonder, nostalgia, or a sense of loss, yet they are carefully arranged fabrications. In their stillness and artificiality, they raise questions about what we choose to preserve, how we represent environments, and what is inevitably left out.",
+            "In a broader sense, this work reflects on how images and environments can be carefully constructed to tell a specific story. Through selective framing and careful design, a version of the truth is presented while other aspects are deliberately excluded. By focusing on fragments and process, my drawings reflect on how belief is shaped by what we are shown, and what remains hidden."
         ],
-        "video-link": [],
-        "installation-images": []
+        "video_link": ["NA"],
+        "installation_images": [
+            {
+                "src": "proscenium/Installation Images/1.jpg",
+                "label": "Alien Shores: landscape, once removed, White Cube, Bermondsey, 2025"
+            }            
+        ]
     },
    
    
     {
-        "id": "archipelago",
+        "id": "archipelago_of_storms_and_spirits",
         "title": "Archipelago of storms and spirits",
         "date": "2024",
-        "images": [
-            "Archipelago of storms and spirits/Picture1.jpg",
-            "Archipelago of storms and spirits/Picture2.jpg",
-            "Archipelago of storms and spirits/Picture3.jpg",
-            "Archipelago of storms and spirits/Picture4.jpg"
+        "work_images": [
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 1.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 2.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 3.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 4.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 5.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 6.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 7.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "10.8 in x 14.5in",
+                "year": "2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 1.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "41.7 in x 52 in",
+                "year": "2023"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 2.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "41.7 in x 52 in",
+                "year": "2023"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 3.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "41.7 in x 52 in",
+                "year": "2023"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 4.jpg",
+                "title": "Untitled",
+                "medium": "Graphite and charcoal on paper",
+                "size": "41.7 in x 52 in",
+                "year": "2023"
+            }
         ],
+
         "description": [
-            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
-            "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci."
+            "Set in the long, dark nights of Sundarbans, a delta formed by the Brahmaputra, Meghna, and Padma rivers in the Bay of Bengal, Pranay Dutta’s Neti dwells on time, tide and terror through an invocation of the more-than-natural. Under mystical ghost lights and the moon, as the waters eat the land, spirits, gods, beasts, and saints bear witness. The scene is still, except for the boats that swing, the beast that lurks, glimmering dust that rises in the night breeze and the mist that lingers above water. In this milieu, without a sound, the sea creeps in, taking one man-made barrier at a time. Sometimes, it is not so quiet. The thunderous charge of storms takes many nights’ worth of land in an instant.",
+            "In Dutta’s work extinctions are predicted in phases. We may mistake them to be cyclical, but they are incremental, each more disastrous than the last. A cycle holds the promise of regeneration of some sort, but here we see only loss, without recuperation.",
+            "Dutta’s primary mediums remain photography and drawing, which converge to produce complex, layered imagery. Through a process of elimination and composition, parts of landscapes and drawings are stitched into one image. These are then imported into the 3D software Blender, usually used to create video games and animations. Dutta challenges the coldness of the images translated by the software with a play of light and shadows. An old folk song is reduced to a hum amongst other score elements produced for the piece. Landscape is ultimately treated cinematically and remains the protagonist.",
+            "Dutta is also interested in the process of excavation and layering. In the large works, delicate ink strokes are used to produce a textural depth to the landscapes on paper. These scenes reference early illustration and poster traditions of the East as well as film storyboards, colonial landscape studies, and botanical drawings. The layering also provides a deliberate density to the image – a sense of fullness or a landscape collapsing onto itself. There is also a diorama-like approach to these visuals. Dutta thinks of the image in layers so there is a foreground, a middle and a background, illuminated dramatically like a theatre set. They seem familiar, but unreal, like they belong to the future. Dutta leaves clues of habitation and in some cases intrusion in the form of barricades and shells for architecture.",
+            "In comparison to these, there is a silence to the drawings on paper – images are distilled to a momentary focus. The shadows of an islet glisten on the water, fog and clouds engulf a lush tree, and divine light filters through a dense mesh of branches and leaves. Dutta attempts to think and conceive these compositions as islands, solitary and unto themselves. But they are not devoid of hope; light finds a way in.",
+            "Archipelago of Storms and Spirits signals a collision of two ecosystems – one of nature and one beyond – and within these, life and stories find home, at least temporarily. A lot remains unresolved in these islands and the search for closure is endless. This is the thing about swamps and shifting terrains, digging pasts is an impossible exercise."            
+        ],
+        "video_link": ["https://youtu.be/8RIPDLcPtgk"],
+        "installation_images": [
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/1.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/2.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/3.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/4.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/5.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            },
+            {
+                "src": "archipelago_of_storms_and_spirits/Installation Images/6.jpg",
+                "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
+            }
         ]
     }
     
