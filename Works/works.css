@@ -61,7 +61,7 @@ body {
   inset: 0;
   width: 100vw;
   height: 100lvh;
-  z-index: -1;
+  z-index: 1;
   pointer-events: none;
   background-image: var(--bg-url);
   background-size: cover;
@@ -361,7 +361,7 @@ body {
   position: relative;
   width: 100%;
   margin-left: 0;
-  z-index: 1;
+  z-index: 2;
   flex: 1;
   padding: 8rem 0 2.8rem 0;
   display: flex;
@@ -601,7 +601,7 @@ body {
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
-  z-index: 1;
+  z-index: 2;
   opacity: 0;
   transition: transform 0.5s ease, opacity 250ms ease;
   touch-action: none;
@@ -675,7 +675,7 @@ body {
   right: 0.4rem;
 }
 
-.modalArrow:hover {
+.modalArrow:hover, .imageModalClose:hover {
   color: #c3ff4a;
 }
 
