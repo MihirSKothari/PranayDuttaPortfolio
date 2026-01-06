@@ -166,19 +166,8 @@ function renderProject(project) {
 
     // 10) Slideshow dots count (work images)
     
-    initSlideshow(0); // cleanup previous project's listeners/timer
-
-    if (showSlideshow) {
-        workList.forEach((item, i) => {
-            const img = document.createElement("img");
-            img.src = item.src;
-            img.alt = item.title ?? project.title;
-            wireModal(img, i);
-            track.appendChild(img);
-        });
-
-        initSlideshow(workList.length);
-    }
+    
+    initSlideshow(workList.length);
 }
 
 // Renders image + caption for a given index (wrap-safe)
