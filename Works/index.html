@@ -26,7 +26,7 @@
         <!-- LEFT SIDE -->
         <div class="leftPanelBg" aria-hidden="true"></div>
         <aside class="worksLeft closed">
-            <button id="homeIcon" class="homeIcon" hidden>
+            <a id="homeIcon" class="homeIcon" href="../" aria-label="Home" hidden>
                 <svg class="homeIconSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
                     focusable="false">
@@ -36,9 +36,8 @@
                     <!-- Door (rounded top) -->
                     <path d="M10 21.5V15.9C10 14.55 10.9 13.75 12 13.75C13.1 13.75 14 14.55 14 15.9V21.5" />
                 </svg>
-            </button>
+            </a>
             <!-- Projects list -->
-            <!--div class="works-label">WORKS</div-->
             <div class="projectsBlock">
                 <nav class="projectMenu" id="projectMenu">
                 </nav>
@@ -78,7 +77,7 @@
                             allowfullscreen></iframe>
                     </div>
                 </section>
-                <div class="videoSeparator"></div>
+                <div class="projectImgGridSeparator" id="projectImgGridSeparator"></div>
                 <!-- Project images -->
                 <section class="projectImgGrid" id="projectImgGrid">
                     <div class="projectGridImages" id="projectGridImages"></div>

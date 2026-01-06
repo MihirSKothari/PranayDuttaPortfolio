@@ -3,6 +3,10 @@
         "id": "proscenium",
         "title": "Proscenium",
         "date": "2025-ongoing",
+        "show_work_images_slideshow": "yes",
+        "show_work_images_grid": "yes",
+        "show_video": "yes",
+        "show_installation_images_grid": "yes",
         "work_images": [
             {
                 "src": "proscenium/Work Images/1.jpg",
@@ -63,109 +67,112 @@
             "There is also a connection here to acts of preservation and museumization. Much like dioramas found in natural history museums, these staged landscapes freeze a version of reality in place - clean, composed, and removed from time. They are often built to evoke wonder, nostalgia, or a sense of loss, yet they are carefully arranged fabrications. In their stillness and artificiality, they raise questions about what we choose to preserve, how we represent environments, and what is inevitably left out.",
             "In a broader sense, this work reflects on how images and environments can be carefully constructed to tell a specific story. Through selective framing and careful design, a version of the truth is presented while other aspects are deliberately excluded. By focusing on fragments and process, my drawings reflect on how belief is shaped by what we are shown, and what remains hidden."
         ],
-        "video_link": ["NA"],
+        "description2": [],
+        "video_link": "NA",
         "installation_images": [
             {
                 "src": "proscenium/Installation Images/1.jpg",
                 "label": "Alien Shores: landscape, once removed, White Cube, Bermondsey, 2025"
-            }            
+            }
         ]
     },
-   
-   
     {
         "id": "archipelago_of_storms_and_spirits",
         "title": "Archipelago of storms and spirits",
         "date": "2024",
+        "show_work_images_slideshow": "yes",
+        "show_work_images_grid": "yes",
+        "show_video": "yes",
+        "show_installation_images_grid": "yes",
         "work_images": [
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 1.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 2.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 3.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 4.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 5.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 6.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Drawing 7.jpg",
                 "title": "Untitled",
                 "medium": "Graphite and charcoal on paper",
-                "size": "10.8 in x 14.5in",
+                "size": "10.8in x 14.5in",
                 "year": "2024"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 1.jpg",
                 "title": "Untitled",
-                "medium": "Graphite and charcoal on paper",
-                "size": "41.7 in x 52 in",
+                "medium": "Ink and turpentine on photographic paper",
+                "size": "41.7in x 52in",
                 "year": "2023"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 2.jpg",
                 "title": "Untitled",
-                "medium": "Graphite and charcoal on paper",
-                "size": "41.7 in x 52 in",
+                "medium": "Ink and turpentine on photographic paper",
+                "size": "41.7in x 52in",
                 "year": "2023"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 3.jpg",
                 "title": "Untitled",
-                "medium": "Graphite and charcoal on paper",
-                "size": "41.7 in x 52 in",
+                "medium": "Ink and turpentine on photographic paper",
+                "size": "41.7in x 52in",
                 "year": "2023"
             },
             {
                 "src": "archipelago_of_storms_and_spirits/Work Images/Mixed Media 4.jpg",
                 "title": "Untitled",
-                "medium": "Graphite and charcoal on paper",
-                "size": "41.7 in x 52 in",
+                "medium": "Ink and turpentine on photographic paper",
+                "size": "41.7in x 52in",
                 "year": "2023"
             }
         ],
-
         "description": [
             "Set in the long, dark nights of Sundarbans, a delta formed by the Brahmaputra, Meghna, and Padma rivers in the Bay of Bengal, Pranay Dutta’s Neti dwells on time, tide and terror through an invocation of the more-than-natural. Under mystical ghost lights and the moon, as the waters eat the land, spirits, gods, beasts, and saints bear witness. The scene is still, except for the boats that swing, the beast that lurks, glimmering dust that rises in the night breeze and the mist that lingers above water. In this milieu, without a sound, the sea creeps in, taking one man-made barrier at a time. Sometimes, it is not so quiet. The thunderous charge of storms takes many nights’ worth of land in an instant.",
             "In Dutta’s work extinctions are predicted in phases. We may mistake them to be cyclical, but they are incremental, each more disastrous than the last. A cycle holds the promise of regeneration of some sort, but here we see only loss, without recuperation.",
             "Dutta’s primary mediums remain photography and drawing, which converge to produce complex, layered imagery. Through a process of elimination and composition, parts of landscapes and drawings are stitched into one image. These are then imported into the 3D software Blender, usually used to create video games and animations. Dutta challenges the coldness of the images translated by the software with a play of light and shadows. An old folk song is reduced to a hum amongst other score elements produced for the piece. Landscape is ultimately treated cinematically and remains the protagonist.",
             "Dutta is also interested in the process of excavation and layering. In the large works, delicate ink strokes are used to produce a textural depth to the landscapes on paper. These scenes reference early illustration and poster traditions of the East as well as film storyboards, colonial landscape studies, and botanical drawings. The layering also provides a deliberate density to the image – a sense of fullness or a landscape collapsing onto itself. There is also a diorama-like approach to these visuals. Dutta thinks of the image in layers so there is a foreground, a middle and a background, illuminated dramatically like a theatre set. They seem familiar, but unreal, like they belong to the future. Dutta leaves clues of habitation and in some cases intrusion in the form of barricades and shells for architecture.",
             "In comparison to these, there is a silence to the drawings on paper – images are distilled to a momentary focus. The shadows of an islet glisten on the water, fog and clouds engulf a lush tree, and divine light filters through a dense mesh of branches and leaves. Dutta attempts to think and conceive these compositions as islands, solitary and unto themselves. But they are not devoid of hope; light finds a way in.",
-            "Archipelago of Storms and Spirits signals a collision of two ecosystems – one of nature and one beyond – and within these, life and stories find home, at least temporarily. A lot remains unresolved in these islands and the search for closure is endless. This is the thing about swamps and shifting terrains, digging pasts is an impossible exercise."            
+            "Archipelago of Storms and Spirits signals a collision of two ecosystems – one of nature and one beyond – and within these, life and stories find home, at least temporarily. A lot remains unresolved in these islands and the search for closure is endless. This is the thing about swamps and shifting terrains, digging pasts is an impossible exercise."
         ],
-        "video_link": ["https://youtu.be/8RIPDLcPtgk"],
+        "description2": [],
+        "video_link": "https://youtu.be/8RIPDLcPtgk",
         "installation_images": [
             {
                 "src": "archipelago_of_storms_and_spirits/Installation Images/1.jpg",
@@ -192,6 +199,132 @@
                 "label": "Archipelago of Storms and Spirits, Jhaveri Contemporary, Mumbai, 2024"
             }
         ]
+    },
+    {
+        "id": "day_zero",
+        "title": "Day Zero",
+        "date": "2022",
+        "show_work_images_slideshow": "yes",
+        "show_work_images_grid": "no",
+        "show_video": "yes",
+        "show_installation_images_grid": "yes",
+        "work_images": [
+            {
+                "src": "day_zero/Work Images/1.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "48in x 64in",
+                "year": "2022"
+            },
+            {
+                "src": "day_zero/Work Images/2.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "64in x 96in (Diptych)",
+                "year": "2025"
+            },
+            {
+                "src": "day_zero/Work Images/3.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "64in x 48in",
+                "year": "2025"
+            },
+            {
+                "src": "day_zero/Work Images/4.jpg",
+                "title": "Untitled",
+                "medium": "Projection mapping on wood",
+                "size": "Variable dimensions",
+                "year": "2022"
+            },
+            {
+                "src": "day_zero/Work Images/5.jpg",
+                "title": "Day Zero",
+                "medium": "Single Channel Video",
+                "size": "7min 42sec",
+                "year": "2022"
+            }
+        ],
+        "description": [
+            "Day Zero concentrates on a segment of my research from the larger study of water and mountain ecologies in the Himalayan, Eastern and North Eastern regions of India.",
+            "To be presented as an immersive simulation complete with video sculptures, the work derives from image-based, geological and climatic evidence of ecological and infrastructural violence. The tendency of humankind towards formal/structural reinvention troubles the protocols used for scientific exploration and political organization of water. It further undergirds the consequences of its unequal use and distribution. The simulation presents a landscape without humans for us to temporarily occupy, turning participants into witnesses of a possible future. It uses atmosphere as a site to stage the politics of water – as a melting, evaporating surface; as currency and its vulnerability to toxicity, contamination and contagion.",
+            "Day Zero also refers to our future as a wet to dry community which few societies/states are independently prepared to cope with. The extractive nature of our species and the mining/reserving/unnatural regeneration of water alludes to a different kind of dark resilience in this post-water world. It may be easy to assume that technology will save us but what if technology is the problem?",
+            "Employing a Ballardian aesthetic and the navigation-language of first person gaming with a self-made score the viewer will travel through the two worlds and its glaring gap as they discover signs/traces of marginalization, erasure and resource deprivation. The attempt is to achieve an uncanny sensation – one of losing our control over landscape – and thirst as monetization."
+        ],
+        "description2": [],
+        "video_link": "https://youtu.be/cKUbfhQY5ks",
+        "installation_images": [
+            {
+                "src": "day_zero/Installation Images/1.jpg",
+                "label": "Kochi Muziris Biennale, Kochi, 2022"
+            },
+            {
+                "src": "day_zero/Installation Images/2.jpg",
+                "label": "Kochi Muziris Biennale, Kochi, 2022"
+            },
+            {
+                "src": "day_zero/Installation Images/3.jpg",
+                "label": "Kochi Muziris Biennale, Kochi, 2022"
+            }
+        ]
+    },
+    {
+        "id": "beneath_the_steel_sky",
+        "title": "Beneath the steel sky",
+        "date": "2019",
+        "show_work_images_slideshow": "yes",
+        "show_work_images_grid": "yes",
+        "show_video": "yes",
+        "show_installation_images_grid": "yes",
+        "work_images": [
+            {
+                "src": "beneath_the_steel_sky/Work Images/1.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "54in x 72in",
+                "year": "2019"
+            },
+            {
+                "src": "beneath_the_steel_sky/Work Images/2.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            },
+            {
+                "src": "beneath_the_steel_sky/Work Images/3.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "54in x 72in",
+                "year": "2025"
+            },
+            {
+                "src": "beneath_the_steel_sky/Work Images/4.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            },
+            {
+                "src": "beneath_the_steel_sky/Work Images/5.jpg",
+                "title": "Untitled",
+                "medium": "Acrylic on photographic vinyl sheet",
+                "size": "54in x 72in",
+                "year": "2019"
+            },
+            {
+                "src": "beneath_the_steel_sky/Work Images/6.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            }
+        ],
+        "description": [
+            "‘Beneath a steel sky’ navigates the other future - a chance with ocean colonization/sea-steading instead of space colonies. The inevitable end of our terrestrial lives with glacial melting, unstable climates and erosion, leads us to think of terra-forming very differently, more so in the absence of the sun. Nature must be brought indoors and cultivated in specific conditions in artificial climates. These chambers enveloping entire mountain and glacial ecologies, float on the ocean surface, or are secured to the ocean floor - a construction existing “outside” national sea boundaries, a micronation. This archipelago is interlinked with non-corrosive metal pipes that move the harvested water."
+        ],
+        "description2": [],
+        "video_link": "NA",
+        "installation_images": ["NA"]
     }
-    
 ]

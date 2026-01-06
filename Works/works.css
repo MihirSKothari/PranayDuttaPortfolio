@@ -61,7 +61,7 @@ body {
   inset: 0;
   width: 100vw;
   height: 100lvh;
-  z-index: 1;
+  z-index: -1;
   pointer-events: none;
   background-image: var(--bg-url);
   background-size: cover;
@@ -180,7 +180,7 @@ body {
   margin-top: 10px;
 }
 
-.videoSeparator {
+.projectImgGridSeparator {
   width: 100%;
   background-color: #9c9c9c;
   height: 2px;
@@ -285,13 +285,6 @@ body {
 
 .worksLeft.closed {
   transform: translateX(-100%);
-}
-
-.works-label {
-  font-family: 'Neris', sans-serif;
-  font-weight: 300;
-  font-size: 1.4rem;
-  letter-spacing: 0.12em;
 }
 
 /*===== PROJECT LIST =====*/

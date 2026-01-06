@@ -44,12 +44,28 @@ function renderProject(project) {
     requestAnimationFrame(syncTopBarFade);
 
     // 2) Slideshow track
+    const slideshowSection = document.getElementById("slideshow");
+    const dotsContainer = document.getElementById("slideshowDots");
+    const prevBtn = document.getElementById("slidePrev");
+    const nextBtn = document.getElementById("slideNext");
     const track = document.getElementById("slidesTrack");
+    const showSlideshow = isYes(project.show_work_images_slideshow);
     track.innerHTML = "";
+    if (slideshowSection) slideshowSection.hidden = !showSlideshow;
+    if (dotsContainer) dotsContainer.hidden = !showSlideshow;
+    if (prevBtn) prevBtn.hidden = !showSlideshow;
+    if (nextBtn) nextBtn.hidden = !showSlideshow;
+
 
     // 3) Grids
+    const workGridSection = document.getElementById("projectImgGrid");
+    const projectImgGridSeparator = document.getElementById("projectImgGridSeparator");
     const workGrid = document.getElementById("projectGridImages");
+    const showWorkGrid = isYes(project.work_images_grid);
     if (workGrid) workGrid.innerHTML = "";
+    if (workGridSection) workGridSection.hidden = !showWorkGrid;
+    if (projectImgGridSeparator) projectImgGridSeparator.hidden = !showWorkGrid;
+    
 
     const instSection = document.getElementById("installationImgGrid");
     const instSeparator = document.getElementById("installationSeparator");
@@ -149,7 +165,20 @@ function renderProject(project) {
     }
 
     // 10) Slideshow dots count (work images)
-    initSlideshow(workList.length);
+    
+    initSlideshow(0); // cleanup previous project's listeners/timer
+
+    if (showSlideshow) {
+        workList.forEach((item, i) => {
+            const img = document.createElement("img");
+            img.src = item.src;
+            img.alt = item.title ?? project.title;
+            wireModal(img, i);
+            track.appendChild(img);
+        });
+
+        initSlideshow(workList.length);
+    }
 }
 
 // Renders image + caption for a given index (wrap-safe)
@@ -482,7 +511,7 @@ function setCurrentProject(id) {
         });
     }, 250); // same as CSS transition duration
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    updateProjectNavButtons()
+
 }
 
 
@@ -539,12 +568,12 @@ function maybeRunMenuIntro() {
     const hamburgerBtn = document.getElementById('hamburgerToggle');
     const leftPanel = document.querySelector('.worksLeft');
 
-    /*const cancel = () => {
+    const cancel = () => {
         clearTimeout(timer);
         timer = null;
         if (hamburgerBtn) hamburgerBtn.removeEventListener('pointerdown', cancel);
         if (leftPanel) leftPanel.removeEventListener('pointerdown', cancel);
-    };*/
+    };
 
     if (hamburgerBtn) hamburgerBtn.addEventListener('pointerdown', cancel, { once: true });
     if (leftPanel) leftPanel.addEventListener('pointerdown', cancel, { once: true });
@@ -589,7 +618,7 @@ function updateProjectNavButtons() {
 }
 
 
-//Helper functions
+//========== Helper functions ==========
 function toYouTubeEmbedUrl(url) {
     if (!url) return null;
 
@@ -665,7 +694,9 @@ function syncTopBarFade() {
 }
 
 
-window.addEventListener('resize', syncLeftPanelBgWidth);
+function isYes(v) {
+  return String(v ?? "").trim().toLowerCase() === "yes";
+}
 
 //Event Listeners
 window.addEventListener('resize', syncTopBarFade, syncLeftPanelBgWidth);
@@ -700,13 +731,9 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleLeftPanel();
         }
     });
-    if (homeIcon) {
-        homeIcon.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = "../";
-        });
-    }
 
+
+    //Modal swipe drag
     if (modal && swipeEl) {
         let isDown = false;
         let startX = 0;
