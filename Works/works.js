@@ -61,7 +61,7 @@ function renderProject(project) {
     const workGridSection = document.getElementById("projectImgGrid");
     const projectImgGridSeparator = document.getElementById("projectImgGridSeparator");
     const workGrid = document.getElementById("projectGridImages");
-    const showWorkGrid = isYes(project.work_images_grid);
+    const showWorkGrid = isYes(project.show_work_images_grid);
     if (workGrid) workGrid.innerHTML = "";
     if (workGridSection) workGridSection.hidden = !showWorkGrid;
     if (projectImgGridSeparator) projectImgGridSeparator.hidden = !showWorkGrid;
