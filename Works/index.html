@@ -72,11 +72,17 @@
                 <!-- Video -->
                 <section class="videoInlay" id="videoInlay" hidden>
                     <div class="videoInlayInner">
-                        <iframe id="projectVideoiframe" src="" title="Project video" frameborder="0"
+                        <iframe hidden id="projectYTiframe" src="" title="Project video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                        <iframe hidden id="projectVimeoiframe" title="Project video" src="" frameborder="0"
+                            referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                             allowfullscreen></iframe>
                     </div>
                 </section>
+                <section class="projectText" id="projectText2"></section> <!--Make Dynamic-->
+                <section class="projectTextImg" id="projectTextImg" hidden></section> <!--Make Dynamic-->
+                <section class="projectText" id="projectText3"></section> <!--Make Dynamic-->
                 <div class="projectImgGridSeparator" id="projectImgGridSeparator"></div>
                 <!-- Project images -->
                 <section class="projectImgGrid" id="projectImgGrid">

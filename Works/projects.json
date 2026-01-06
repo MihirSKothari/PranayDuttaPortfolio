@@ -69,6 +69,7 @@
         ],
         "description2": [],
         "video_link": "NA",
+        "video_host": "NA",
         "installation_images": [
             {
                 "src": "proscenium/Installation Images/1.jpg",
@@ -165,14 +166,17 @@
         ],
         "description": [
             "Set in the long, dark nights of Sundarbans, a delta formed by the Brahmaputra, Meghna, and Padma rivers in the Bay of Bengal, Pranay Dutta’s Neti dwells on time, tide and terror through an invocation of the more-than-natural. Under mystical ghost lights and the moon, as the waters eat the land, spirits, gods, beasts, and saints bear witness. The scene is still, except for the boats that swing, the beast that lurks, glimmering dust that rises in the night breeze and the mist that lingers above water. In this milieu, without a sound, the sea creeps in, taking one man-made barrier at a time. Sometimes, it is not so quiet. The thunderous charge of storms takes many nights’ worth of land in an instant.",
-            "In Dutta’s work extinctions are predicted in phases. We may mistake them to be cyclical, but they are incremental, each more disastrous than the last. A cycle holds the promise of regeneration of some sort, but here we see only loss, without recuperation.",
+            "In Dutta’s work extinctions are predicted in phases. We may mistake them to be cyclical, but they are incremental, each more disastrous than the last. A cycle holds the promise of regeneration of some sort, but here we see only loss, without recuperation."
+            
+        ],
+        "description2": [
             "Dutta’s primary mediums remain photography and drawing, which converge to produce complex, layered imagery. Through a process of elimination and composition, parts of landscapes and drawings are stitched into one image. These are then imported into the 3D software Blender, usually used to create video games and animations. Dutta challenges the coldness of the images translated by the software with a play of light and shadows. An old folk song is reduced to a hum amongst other score elements produced for the piece. Landscape is ultimately treated cinematically and remains the protagonist.",
             "Dutta is also interested in the process of excavation and layering. In the large works, delicate ink strokes are used to produce a textural depth to the landscapes on paper. These scenes reference early illustration and poster traditions of the East as well as film storyboards, colonial landscape studies, and botanical drawings. The layering also provides a deliberate density to the image – a sense of fullness or a landscape collapsing onto itself. There is also a diorama-like approach to these visuals. Dutta thinks of the image in layers so there is a foreground, a middle and a background, illuminated dramatically like a theatre set. They seem familiar, but unreal, like they belong to the future. Dutta leaves clues of habitation and in some cases intrusion in the form of barricades and shells for architecture.",
             "In comparison to these, there is a silence to the drawings on paper – images are distilled to a momentary focus. The shadows of an islet glisten on the water, fog and clouds engulf a lush tree, and divine light filters through a dense mesh of branches and leaves. Dutta attempts to think and conceive these compositions as islands, solitary and unto themselves. But they are not devoid of hope; light finds a way in.",
             "Archipelago of Storms and Spirits signals a collision of two ecosystems – one of nature and one beyond – and within these, life and stories find home, at least temporarily. A lot remains unresolved in these islands and the search for closure is endless. This is the thing about swamps and shifting terrains, digging pasts is an impossible exercise."
         ],
-        "description2": [],
         "video_link": "https://youtu.be/8RIPDLcPtgk",
+        "video_host": "YT",
         "installation_images": [
             {
                 "src": "archipelago_of_storms_and_spirits/Installation Images/1.jpg",
@@ -247,12 +251,15 @@
         ],
         "description": [
             "Day Zero concentrates on a segment of my research from the larger study of water and mountain ecologies in the Himalayan, Eastern and North Eastern regions of India.",
-            "To be presented as an immersive simulation complete with video sculptures, the work derives from image-based, geological and climatic evidence of ecological and infrastructural violence. The tendency of humankind towards formal/structural reinvention troubles the protocols used for scientific exploration and political organization of water. It further undergirds the consequences of its unequal use and distribution. The simulation presents a landscape without humans for us to temporarily occupy, turning participants into witnesses of a possible future. It uses atmosphere as a site to stage the politics of water – as a melting, evaporating surface; as currency and its vulnerability to toxicity, contamination and contagion.",
+            "To be presented as an immersive simulation complete with video sculptures, the work derives from image-based, geological and climatic evidence of ecological and infrastructural violence. The tendency of humankind towards formal/structural reinvention troubles the protocols used for scientific exploration and political organization of water. It further undergirds the consequences of its unequal use and distribution. The simulation presents a landscape without humans for us to temporarily occupy, turning participants into witnesses of a possible future. It uses atmosphere as a site to stage the politics of water – as a melting, evaporating surface; as currency and its vulnerability to toxicity, contamination and contagion."
+        ],
+        "description2": [
             "Day Zero also refers to our future as a wet to dry community which few societies/states are independently prepared to cope with. The extractive nature of our species and the mining/reserving/unnatural regeneration of water alludes to a different kind of dark resilience in this post-water world. It may be easy to assume that technology will save us but what if technology is the problem?",
             "Employing a Ballardian aesthetic and the navigation-language of first person gaming with a self-made score the viewer will travel through the two worlds and its glaring gap as they discover signs/traces of marginalization, erasure and resource deprivation. The attempt is to achieve an uncanny sensation – one of losing our control over landscape – and thirst as monetization."
+
         ],
-        "description2": [],
         "video_link": "https://youtu.be/cKUbfhQY5ks",
+        "video_host": "YT",
         "installation_images": [
             {
                 "src": "day_zero/Installation Images/1.jpg",
@@ -265,6 +272,79 @@
             {
                 "src": "day_zero/Installation Images/3.jpg",
                 "label": "Kochi Muziris Biennale, Kochi, 2022"
+            }
+        ]
+    },
+    {
+        "id": "moments_before_the_fall",
+        "title": "Moments before the fall",
+        "date": "2020",
+        "show_work_images_slideshow": "yes",
+        "show_work_images_grid": "no",
+        "show_video": "yes",
+        "show_installation_images_grid": "yes",
+        "work_images": [
+            {
+                "src": "moments_before_the_fall/Screengrabs/1.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            },
+            {
+                "src": "moments_before_the_fall/Screengrabs/2.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            },
+            {
+                "src": "moments_before_the_fall/Screengrabs/3.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            },
+            {
+                "src": "moments_before_the_fall/Screengrabs/4.jpg",
+                "title": "",
+                "medium": "",
+                "size": "",
+                "year": ""
+            }
+        ],
+        "description": [
+            "Moments before the Fall is a simulation of ecological conditions generated by numbers and codes. Taking as it’s starting point, the generation of a cumulonimbus cloud that eventually leads to a  cloudburst, the incident is an unfolding of 36 minutes of simulated time expanded into 144 hours in real time."
+        ],
+        "description2": [
+            "This project talks about the age of AI (Artificial Intelligence) and how it governs the World today - A natural phenomenon explored through the lens and the brain of a machine. The software takes numbers and measures to create approximations and estimates of the generation of a cloudburst and the resultant downpour.",
+            "Moments before the Fall is entirely a machine made creation. The World constructed is a result of numerous codes and inputs."
+        ],
+        "description3": [
+            "The project has been distributed over a slot of 6 days. Each moment within the simulation is unique and will not repeat itself over the span of the project.",
+            "For a period of 6 days, the site functions as an immersive inverted light box composed of the procedural construction and deconstruction of the cloudburst.",
+            "Moments Before the Fall is realised within the framework of Five Million Incidents, 2019-2020, conceived by Goethe-Institut / Max Mueller Bhavan in collaboration with Raqs Media Collective."
+        ],
+        "video_link": "https://vimeo.com/431812621?fl=pl&fe=sh",
+        "video_host": "Vimeo",
+        "installation_images": [
+            {
+                "src": "moments_before_the_fall/Installation Images/1.jpg",
+                "label": "Five Million Incidents, Goethe-Institut, Max Mueller Bhavan, Delhi, 2020"
+            },
+            {
+                "src": "moments_before_the_fall/Installation Images/2.jpg",
+                "label": "Five Million Incidents, Goethe-Institut, Max Mueller Bhavan, Delhi, 2020"
+            },
+            {
+                "src": "moments_before_the_fall/Installation Images/3.jpg",
+                "label": "Five Million Incidents, Goethe-Institut, Max Mueller Bhavan, Delhi, 2020"
+            }
+        ],
+        "other_images": [
+            {
+                "src": "moments_before_the_fall/Installation Images/Workflow image.png",
+                "label": "Backend workflow"
             }
         ]
     },
@@ -324,7 +404,10 @@
             "‘Beneath a steel sky’ navigates the other future - a chance with ocean colonization/sea-steading instead of space colonies. The inevitable end of our terrestrial lives with glacial melting, unstable climates and erosion, leads us to think of terra-forming very differently, more so in the absence of the sun. Nature must be brought indoors and cultivated in specific conditions in artificial climates. These chambers enveloping entire mountain and glacial ecologies, float on the ocean surface, or are secured to the ocean floor - a construction existing “outside” national sea boundaries, a micronation. This archipelago is interlinked with non-corrosive metal pipes that move the harvested water."
         ],
         "description2": [],
-        "video_link": "NA",
-        "installation_images": ["NA"]
+        "video_link": "https://vimeo.com/340889874?fl=pl&fe=sh",
+        "video_host": "Vimeo",
+        "installation_images": [
+            "NA"
+        ]
     }
 ]

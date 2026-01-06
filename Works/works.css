@@ -196,7 +196,7 @@ body {
 
 /* NEW: Panel-only background overlay that fades in (does NOT slide) */
 
-.leftPanelBg{
+.leftPanelBg {
   position: fixed;
   top: 0;
   left: 0;
@@ -212,19 +212,20 @@ body {
   clip-path: inset(0);
 
   -webkit-mask-image: linear-gradient(to right,
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) calc(100% - var(--fade-extend)),
-    rgba(0,0,0,0) 100%);
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
+      rgba(0, 0, 0, 0) 100%);
   mask-image: linear-gradient(to right,
-    rgba(0,0,0,1) 0,
-    rgba(0,0,0,1) calc(100% - var(--fade-extend)),
-    rgba(0,0,0,0) 100%);
+      rgba(0, 0, 0, 1) 0,
+      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
+      rgba(0, 0, 0, 0) 100%);
 }
 
 
-.leftPanelBg::before{
-  content:"";
-  position: fixed;        /* key change: fixed + full viewport */
+.leftPanelBg::before {
+  content: "";
+  position: fixed;
+  /* key change: fixed + full viewport */
   top: 0;
   left: 0;
   width: 100vw;
@@ -394,6 +395,23 @@ body {
   cursor: grabbing;
 }
 
+
+.slideshowContainer.slideshow--single {
+  max-height: 700px;
+  /* increase height vs current 500px */
+}
+
+.slideshowContainer.slideshow--single .slidesTrack {
+  gap: 0;
+}
+
+.slideshowContainer.slideshow--single .slidesTrack img {
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 .slideArrow {
   position: absolute;
   top: 50%;
@@ -484,6 +502,31 @@ body {
 .projectText p+p {
   margin-top: 1.2rem;
   /* spacing between paragraphs */
+}
+
+
+/* MSK Temp, make dynamic */
+.projectTextImg {
+  width: 100%;
+  /* Match the vertical rhythm of other blocks */
+}
+
+/* If you used <figure class="projectTextFigure"> */
+.projectTextFigure {
+  margin: 0;
+  /* remove default figure margins */
+  width: 100%;
+}
+
+.projectTextImg img,
+.projectTextFigure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* preserves aspect ratio */
+  max-width: 100%;
+  object-fit: contain;
+  /* don’t crop */
 }
 
 /* Video inlay */
@@ -668,7 +711,8 @@ body {
   right: 0.4rem;
 }
 
-.modalArrow:hover, .imageModalClose:hover {
+.modalArrow:hover,
+.imageModalClose:hover {
   color: #c3ff4a;
 }
 
@@ -772,6 +816,7 @@ body {
   .slideshowContainer {
     height: auto;
   }
+
 
   .slidesTrack {
     height: auto;

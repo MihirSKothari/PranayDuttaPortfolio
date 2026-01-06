@@ -145,28 +145,103 @@ function renderProject(project) {
 
     // 8) Description
     const textEl = document.getElementById("projectText");
+    const textE2 = document.getElementById("projectText2");
+    const textE3 = document.getElementById("projectText3");
     textEl.innerHTML = "";
+    textE2.innerHTML = "";
+    textE3.innerHTML = "";
     (project.description ?? []).forEach(par => {
         const p = document.createElement("p");
         p.textContent = par;
         textEl.appendChild(p);
     });
+    (project.description2 ?? []).forEach(par => {
+        const p = document.createElement("p");
+        p.textContent = par;
+        textE2.appendChild(p);
+    });
+    (project.description3 ?? []).forEach(par => {
+        const p = document.createElement("p");
+        p.textContent = par;
+        textE3.appendChild(p);
+    });
 
     // 9)
     const videoSection = document.getElementById("videoInlay");
-    const iframe = document.getElementById("projectVideoiframe");
-    const embedUrl = toYouTubeEmbedUrl(project.video_link);
-    if (videoSection && iframe && embedUrl) {
-        iframe.src = embedUrl;
-        videoSection.hidden = false;
-    } else if (videoSection && iframe) {
-        iframe.src = "";
+    const iframeYT = document.getElementById("projectYTiframe");
+    const iframeVimeo = document.getElementById("projectVimeoiframe");
+
+    if (project.video_host === "YT") {
+        if (iframeYT) iframeYT.hidden = false;
+        if (iframeVimeo) iframeVimeo.hidden = true;
+        const embedUrl = toYouTubeEmbedUrl(project.video_link);
+        if (videoSection && iframeYT && embedUrl) {
+            iframeYT.src = embedUrl;
+            videoSection.hidden = false;
+        } else if (videoSection && iframeYT) {
+            iframeYT.src = "";
+            videoSection.hidden = true;
+        }
+    }
+    else if (project.video_host === "Vimeo") {
+
+        if (iframeYT) iframeYT.hidden = true;
+        if (iframeVimeo) iframeVimeo.hidden = false;
+        const embedUrl = toVimeoEmbedUrl(project.video_link);
+        if (videoSection && iframeVimeo && embedUrl) {
+            iframeVimeo.src = embedUrl;
+            videoSection.hidden = false;
+        } else if (videoSection && iframeVimeo) {
+            iframeVimeo.src = "";
+            videoSection.hidden = true;
+        }
+    }
+    
+    else if (project.video_host === "NA") {
+        if (iframeYT) iframeYT.hidden = true;
+        if (iframeVimeo) iframeVimeo.hidden = true;
         videoSection.hidden = true;
     }
 
-    // 10) Slideshow dots count (work images)
-    
-    
+
+    //MSK Special handling, make dynamic
+    const textImageSection = document.getElementById("projectTextImg");
+    const isSpecial = project.id === "moments_before_the_fall" || project.title === "moments_before_the_fall";
+    if (textImageSection) {
+        // reset every time to avoid leftovers from previous project
+        textImageSection.innerHTML = "";
+        textImageSection.hidden = true;
+
+        // Prefer project.id; fall back to title if you must
+        
+
+        const other = project.other_images ?? [];
+        const hasOtherImages = Array.isArray(other) && other.length > 0;
+
+        if (isSpecial && hasOtherImages) {
+            textImageSection.hidden = false;
+
+            // If you only want the first one
+            const item = other[0];
+
+            const figure = document.createElement("figure");
+            figure.className = "projectTextFigure"; // optional CSS hook
+
+            const img = document.createElement("img");
+            img.src = item.src;
+            img.alt = item.label || project.title || "";
+
+            figure.appendChild(img);
+            textImageSection.appendChild(figure);
+        }
+    }
+
+    if (slideshowSection) {
+        slideshowSection.classList.toggle("slideshow--single", isSpecial);
+    }
+
+
+    // 10) Slideshow dots count (work images)   
     initSlideshow(workList.length);
 }
 
@@ -498,8 +573,9 @@ function setCurrentProject(id) {
         requestAnimationFrame(() => {
             details.classList.remove('is-fading');
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 250); // same as CSS transition duration
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
 
 }
 
@@ -625,6 +701,34 @@ function toYouTubeEmbedUrl(url) {
     const id = m?.[1];
     return id ? `https://www.youtube.com/embed/${id}` : null;
 }
+
+
+function toVimeoEmbedUrl(url) {
+
+    if (!url) return null;
+
+    // Accept array or string
+    if (Array.isArray(url)) url = url[0];
+    if (typeof url !== "string") return null;
+
+    // Normalize
+    url = url.trim();
+
+    const m =
+        url.match(/player\.vimeo\.com\/video\/(\d+)/) ||
+        url.match(/vimeo\.com\/(?:.*\/)?(\d+)(?:$|[/?#])/);
+
+    const id = m?.[1];
+    if (!id) return null;
+    const hashMatch = url.match(/vimeo\.com\/(?:.*\/)?\d+\/([A-Za-z0-9]+)/);
+    const h = hashMatch?.[1];
+
+    return h
+        ? `https://player.vimeo.com/video/${id}?h=${encodeURIComponent(h)}`
+        : `https://player.vimeo.com/video/${id}`;
+}
+
+
 
 function closeLeftPanel() {
     const hamburgerBtn = document.getElementById('hamburgerToggle');
