@@ -58,8 +58,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  inset: 0;
   width: 100vw;
-  height: 100vh;
   height: 100lvh;
   z-index: -1;
   pointer-events: none;
@@ -83,11 +83,8 @@ body {
   z-index: 50;
   pointer-events: none;
   overflow: hidden;
-
-  /* solid height (fade starts here) */
+  clip-path: inset(0);
   --panel-h: 80px;
-
-  /* fade length */
   --fade-extend: 100px;
 
   /* total height = solid + fade */
@@ -105,8 +102,12 @@ body {
 
 .topBar::before {
   content: "";
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100lvh;
+
   background-image: var(--bg-url);
   background-size: cover;
   background-position: center;
@@ -195,45 +196,39 @@ body {
 
 /* NEW: Panel-only background overlay that fades in (does NOT slide) */
 
-.leftPanelBg {
+.leftPanelBg{
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100lvh;
   z-index: 90;
-
-  background: none;
   opacity: 0;
   transition: opacity 0.5s ease;
-
   --panel-w: 600px;
-  /* fallback */
   --fade-extend: 220px;
-  /* how far the fade continues to the right */
-
   width: calc(var(--panel-w) + var(--fade-extend));
   overflow: hidden;
   pointer-events: none;
+  clip-path: inset(0);
 
   -webkit-mask-image: linear-gradient(to right,
-      rgba(0, 0, 0, 1) 0,
-      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
-      rgba(0, 0, 0, 0) 100%);
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) calc(100% - var(--fade-extend)),
+    rgba(0,0,0,0) 100%);
   mask-image: linear-gradient(to right,
-      rgba(0, 0, 0, 1) 0,
-      rgba(0, 0, 0, 1) calc(100% - var(--fade-extend)),
-      rgba(0, 0, 0, 0) 100%);
+    rgba(0,0,0,1) 0,
+    rgba(0,0,0,1) calc(100% - var(--fade-extend)),
+    rgba(0,0,0,0) 100%);
 }
 
 
-.leftPanelBg::before {
-  content: "";
-  position: absolute;
+.leftPanelBg::before{
+  content:"";
+  position: fixed;        /* key change: fixed + full viewport */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-
+  width: 100vw;
+  height: 100lvh;
   background-image: var(--bg-url);
   background-size: cover;
   background-position: center;

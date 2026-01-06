@@ -643,8 +643,8 @@ function syncLeftPanelBgWidth() {
     const bg = document.querySelector('.leftPanelBg');
     if (!panel || !bg) return;
 
-    const panelW = panel.getBoundingClientRect().width;
-    const vw = window.visualViewport?.width ?? window.innerWidth;
+    const panelW = Math.round(panel.getBoundingClientRect().width);
+    const vw = Math.round(window.visualViewport?.width ?? window.innerWidth);
 
     const isMobile = vw <= 900; // match your CSS breakpoint
     const w = isMobile ? 1000 : panelW;
@@ -658,7 +658,7 @@ function syncTopBarFade() {
     if (!sep || !topBar) return;
 
     // bottom is viewport Y coordinate of the separator’s bottom edge
-    const fadeStartPx = sep.getBoundingClientRect().bottom; // px [web:12]
+    const fadeStartPx = Math.round(sep.getBoundingClientRect().bottom); // px [web:12]
 
     const extraSolidPadding = 8; // set e.g. 8/12 if you want space after the line
     topBar.style.setProperty('--panel-h', `${Math.ceil(fadeStartPx + extraSolidPadding)}px`);
