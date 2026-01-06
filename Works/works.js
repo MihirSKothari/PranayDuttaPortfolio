@@ -160,11 +160,14 @@ function renderProject(project) {
         p.textContent = par;
         textE2.appendChild(p);
     });
+    textE2.hidden = textE2.childElementCount === 0;
     (project.description3 ?? []).forEach(par => {
         const p = document.createElement("p");
         p.textContent = par;
         textE3.appendChild(p);
     });
+    textE3.hidden = textE3.childElementCount === 0;
+
 
     // 9)
     const videoSection = document.getElementById("videoInlay");
