@@ -573,7 +573,7 @@ function setCurrentProject(id) {
         requestAnimationFrame(() => {
             details.classList.remove('is-fading');
         });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollToTopSmooth();
     }, 250); // same as CSS transition duration
     
 
@@ -728,7 +728,13 @@ function toVimeoEmbedUrl(url) {
         : `https://player.vimeo.com/video/${id}`;
 }
 
-
+function scrollToTopSmooth() {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+}
 
 function closeLeftPanel() {
     const hamburgerBtn = document.getElementById('hamburgerToggle');
