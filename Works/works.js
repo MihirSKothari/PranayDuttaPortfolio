@@ -533,7 +533,7 @@ function maybeRunMenuIntro() {
 
     let timer = setTimeout(() => {
         closeLeftPanel();
-    }, 2000);
+    }, 4000);
 
     // If user interacts, cancel the auto-close
     const hamburgerBtn = document.getElementById('hamburgerToggle');
