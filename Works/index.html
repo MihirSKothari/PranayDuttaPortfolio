@@ -12,21 +12,21 @@
 
 <body>
     <div class="bgLayer" aria-hidden="true"></div>
-    <div class="worksWrapper">
+    <div class="worksWrapper"> <!--keep it here-->
 
-        <div class="topBar" aria-hidden="true"></div>
-        <button id="hamburgerToggle" class="hamburgerToggleFixed" aria-label="Toggle menu">
+        <div class="topBar" aria-hidden="true"></div> <!--keep it here-->
+        <button id="hamburgerToggle" class="hamburgerToggleFixed" aria-label="Toggle menu"> <!--keep it here-->
             <span></span><span></span><span></span>
         </button>
-        <header class="projectTitleBar">
-            <h1 class="projectTitle" id="projectTitle"></h1>
-            <div class="projectTitleSeparator"></div>
+        <header class="projectTitleBar"> <!--keep it here-->
+            <h1 class="projectTitle" id="projectTitle"></h1> <!--keep it here-->
+            <div class="projectTitleSeparator"></div> <!--keep it here-->
         </header>
 
         <!-- LEFT SIDE -->
-        <div class="leftPanelBg" aria-hidden="true"></div>
-        <aside class="worksLeft closed">
-            <a id="homeIcon" class="homeIcon" href="../" aria-label="Home" hidden>
+        <div class="leftPanelBg" aria-hidden="true"></div> <!--keep it here-->
+        <aside class="worksLeft closed"> <!--keep it here-->
+            <a id="homeIcon" class="homeIcon" href="../" aria-label="Home" hidden> <!--keep it here-->
                 <svg class="homeIconSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
                     focusable="false">
@@ -38,13 +38,13 @@
                 </svg>
             </a>
             <!-- Projects list -->
-            <div class="projectsBlock">
+            <div class="projectsBlock"> <!--keep it here-->
                 <nav class="projectMenu" id="projectMenu">
                 </nav>
             </div>
 
             <!-- Category list -->
-            <div class="categoriesBlock">
+            <div class="categoriesBlock"> <!--keep it here-->
                 <a href="#" class="categoryLink">Drawings</a>
                 <a href="#" class="categoryLink">Mixed Media</a>
                 <a href="#" class="categoryLink">Video</a>
@@ -55,22 +55,22 @@
 
         <!-- RIGHT SIDE -->
         <!-- All project details -->
-        <div class="projectDetails">
+        <div class="projectDetails"> <!--keep it here-->
             <!-- Main content -->
-            <main class="projectMain">
+            <main class="projectMain"> <!--main container for js to work on-->
                 <!-- 6: Slideshow container -->
-                <section class="slideshowContainer" id="slideshow">
-                    <button class="slideArrow slideArrowLeft" id="slidePrev">&#10094;</button>
-                    <div class="slidesTrack" id="slidesTrack"></div>
-                    <button class="slideArrow slideArrowRight" id="slideNext">&#10095;</button>
+                <section class="slideshowContainer" id="slideshow"> <!--to be created by js-->
+                    <button class="slideArrow slideArrowLeft" id="slidePrev">&#10094;</button> <!--to be created by js-->
+                    <div class="slidesTrack" id="slidesTrack"></div> <!--to be created by js-->
+                    <button class="slideArrow slideArrowRight" id="slideNext">&#10095;</button> <!--to be created by js-->
                 </section>
-                <div class="slideshowDots" id="slideshowDots"></div>
+                <div class="slideshowDots" id="slideshowDots"></div> <!--to be created by js-->
 
                 <!-- Description text -->
-                <section class="projectText" id="projectText"></section>
+                <section class="projectText" id="projectText"></section> <!--to be created by js-->
 
                 <!-- Video -->
-                <section class="videoInlay" id="videoInlay" hidden>
+                <section class="videoInlay" id="videoInlay" hidden> <!--to be created by js-->
                     <div class="videoInlayInner">
                         <iframe hidden id="projectYTiframe" src="" title="Project video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -80,24 +80,24 @@
                             allowfullscreen></iframe>
                     </div>
                 </section>
-                <section class="projectText" id="projectText2"></section> <!--Make Dynamic-->
-                <section class="projectTextImg" id="projectTextImg" hidden></section> <!--Make Dynamic-->
-                <section class="projectText" id="projectText3"></section> <!--Make Dynamic-->
-                <div class="projectImgGridSeparator" id="projectImgGridSeparator"></div>
+                <section class="projectText" id="projectText2"></section> <!--to be created by js-->
+                <section class="projectTextImg" id="projectTextImg" hidden></section> <!--to be created by js-->
+                <section class="projectText" id="projectText3"></section> <!--to be created by js-->
+                <div class="projectImgGridSeparator" id="projectImgGridSeparator"></div> <!--to be created by js-->
                 <!-- Project images -->
-                <section class="projectImgGrid" id="projectImgGrid">
-                    <div class="projectGridImages" id="projectGridImages"></div>
+                <section class="projectImgGrid" id="projectImgGrid"> <!--to be created by js-->
+                    <div class="projectGridImages" id="projectGridImages"></div> <!--to be created by js-->
                 </section>
-                <div class="installationSeparator" id="installationSeparator" hidden></div>
+                <div class="installationSeparator" id="installationSeparator" hidden></div> <!--to be created by js-->
                 <!-- Installation images -->
-                <section class="installationImgGrid" id="installationImgGrid" hidden>
-                    <div class="installationGridImages" id="installationGridImages"></div>
+                <section class="installationImgGrid" id="installationImgGrid" hidden> <!--to be created by js-->
+                    <div class="installationGridImages" id="installationGridImages"></div> <!--to be created by js-->
                 </section>
             </main>
         </div>
     </div>
 
-    <div id="imageModal" class="imageModal">
+    <div id="imageModal" class="imageModal"> <!--keep it here-->
         <div class="imageModalBackdrop"></div>
         <div class="imageModalContent">
             <button class="modalArrow modalArrowLeft" id="modalPrev">&#10094;</button>
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <section class="projectNav" id="projectNav">
+    <section class="projectNav" id="projectNav"> <!--keep it here-->
         <button type="button" class="projectNavBtn" id="projectPrevProject">←</button>
         <button type="button" class="projectNavBtn" id="projectNextProject">→</button>
     </section>
