@@ -49,6 +49,14 @@ function maybeRunMenuIntro() {
     if (leftPanel) leftPanel.addEventListener('pointerdown', cancel, { once: true });
 }
 
+function scrollToTopSmooth() {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+}
+
 function closeLeftPanel() {
     if (!hamburgerBtn || !leftPanel) return;
 

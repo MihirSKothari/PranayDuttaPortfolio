@@ -5,53 +5,66 @@
     <meta charset="UTF-8" />
     <title>CV - Pranay Dutta</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preload" as="image" href="../BG2.jpg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!--script src="works.js"></script-->
+    <script src="about.js" defer></script>
 </head>
 
 <body>
-    <div class="CV-wrapper">
+    <div class="bgLayer"></div>
+    <div class="aboutWrapper">
         <!-- LEFT SIDE -->
-        <aside class="CV-left">
+        <div class="topBar" aria-hidden="true"></div>
+        <button id="hamburgerToggle" class="hamburgerToggleFixed" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <header class="pageTitleBar">
+            <h1 class="pageTitle" id="pageTitle">CV</h1>
+            <div class="pageTitleSeparator"></div>
+        </header>
 
-            <!-- Back button + WORKS label -->
-            <div class="top-bar">
-                <a href="../../index.html" class="back-button">&lt;</a>
-                <div class="CV-label">CV</div>
+
+        <!-- LEFT SIDE -->
+        <div class="leftPanelBg" aria-hidden="true"></div>
+        <aside class="aboutLeft closed">
+            <a id="homeIcon" class="homeIcon" href="../../" aria-label="Home" hidden>
+                <svg class="homeIconSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <!-- House outline -->
+                    <path
+                        d="M4.5 10.5L12 4.25L19.5 10.5V19.25A2.25 2.25 0 0 1 17.25 21.5H6.75A2.25 2.25 0 0 1 4.5 19.25V10.5Z" />
+                    <!-- Door (rounded top) -->
+                    <path d="M10 21.5V15.9C10 14.55 10.9 13.75 12 13.75C13.1 13.75 14 14.55 14 15.9V21.5" />
+                </svg>
+            </a>
+            <!-- About list -->
+            <div class="navBlock">
+                <a href="../Bio/" class="navLink">Bio</a>
+                <a href="#" class="navLink is-active">CV</a>
+                <a href="../Links/" class="navLink">Links</a>
+                <a href="../Contact/" class="navLink">Contact</a>
             </div>
-
+        
+            <!-- Category list -->        
+        </aside>
+        
+        
+        <aside class="aboutRight">
             <!-- Items list -->
-            <div class="items-block">
-                <nav class="items-menu", id="items-menu">
-                        <a class="item-link" href="../Bio/">Bio</a>   
-                        <a class="item-link" is-active href="../CV/">CV</a>
-                        <a class="item-link" href="../Links/">Links</a>
-                </nav>            
+            <div class="itemsBlock">
+                    <p class="BioText">Dutta received his BVA in painting from MS University, Baroda in 2016 and a MVA in painting from
+                        MS University, Baroda in 2019.</p>
+                    <p class="BioText">His work has been exhibited at White Cube Bermondsey, London (2025); Malmö Konstmuseum,
+                        Sweden (2025); Thyssen-Bornemisza Art Contemporary, Madrid (2023); Kochi Muziris Biennale
+                        (2022); Fondazione Elpis, Milan (2022); Goethe-Institut, Max Mueller Bhavan, New Delhi (2020);
+                        Space Studio, Vadodara (2020); Serendipity Arts Festival, Goa (2019); Indigo+Madder, London
+                        (2018); Khoj, New Delhi (2018).</p>
+                    <p class="BioText">Dutta was a recipient of the FICA Emerging Artist award
+                        (Extended Support Platform with Mrinalini Mukherjee Foundation) (2020) and the Inlaks Fine Art
+                        Award (2019)</p>
             </div>
         </aside>
-
-        <!-- RIGHT SIDE -->
-        <!-- All item details -->
-        <div class="item-details">
-            <!-- Title bar -->
-            <header class="item-title-bar">
-                <h1 class="item-title", id="item-title">CV</h1>
-                <div class="item-title-separator"></div>
-            </header>
-
-            <!-- Main content -->
-            <main class="item-main">
-                <!-- Description text -->
-                <section class="item-text", id="item-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                </section>
-            </main>
-        </div>
     </div>
+</body>
 
-    </body>
-    
-    </html>
+</html>
