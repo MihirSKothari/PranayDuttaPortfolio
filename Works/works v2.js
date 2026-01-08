@@ -475,6 +475,9 @@ function showModalImageAt(index) {
         captionEl.innerHTML = [item.title, item.medium, item.size, item.year].filter(Boolean).join("<br>");
     } else if (item.kind === "installation") {
         captionEl.innerHTML = item.label ?? "";
+    } else if (item.kind === "category") {
+        captionEl.innerHTML = itemLines(item).join("<br>");
+
     } else {
         captionEl.innerHTML = item.label ?? item.title ?? "";
     }
