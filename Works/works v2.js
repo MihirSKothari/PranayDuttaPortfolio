@@ -12,12 +12,15 @@ function initDomRefs() {
 }
 
 let allProjects;
+let allCategories = [];
 let currentProjectId = null;
 
-let modalImageIndex = 0;
 let modalImageList = [];
+let workList = [];
+let instList = [];
 let modalWorkList = [];
 let modalInstList = [];
+let modalCategoryList = [];
 let modalScopeList = [];
 let modalScopeIndex = 0;
 let __modalAnimating = false;
@@ -25,228 +28,435 @@ let __modalAnimating = false;
 let slideshowTimer = null;
 let slideshowAbort = null;
 
-function toggleLeftPanel() {
-
-    if (!els.hamburgerBtn || !els.leftPanel) return;
-
-    els.leftPanel.classList.toggle('closed');
-    els.hamburgerBtn.classList.toggle('open');
-
-    const isOpen = !els.leftPanel.classList.contains('closed');
-
-    if (els.leftBg) els.leftBg.classList.toggle('is-visible', isOpen);
-    if (els.homeIcon) els.homeIcon.hidden = !isOpen;   // visible only when open
-}
-
 function renderProject(project) {
-    // 1) Title
-    els.titleEl.textContent = `${project.title} (${project.date})`;
-    requestAnimationFrame(syncTopBarFade);
 
-    // 2) Slideshow track
-    const slideshowSection = document.getElementById("slideshow");
-    const dotsContainer = document.getElementById("slideshowDots");
-    const prevBtn = document.getElementById("slidePrev");
-    const nextBtn = document.getElementById("slideNext");
-    const track = document.getElementById("slidesTrack");
-    const showSlideshow = isYes(project.show_work_images_slideshow);
-    track.innerHTML = "";
-    if (slideshowSection) slideshowSection.hidden = !showSlideshow;
-    if (dotsContainer) dotsContainer.hidden = !showSlideshow;
-    if (prevBtn) prevBtn.hidden = !showSlideshow;
-    if (nextBtn) nextBtn.hidden = !showSlideshow;
+    normalizeProject(project);
+    renderTitle(project);
 
+    const mount = document.getElementById("projectMain");
+    if (!mount) return;
+    mount.replaceChildren();
 
-    // 3) Grids
-    const workGridSection = document.getElementById("projectImgGrid");
-    const projectImgGridSeparator = document.getElementById("projectImgGridSeparator");
-    const workGrid = document.getElementById("projectGridImages");
-    const showWorkGrid = isYes(project.show_work_images_grid);
-    if (workGrid) workGrid.innerHTML = "";
-    if (workGridSection) workGridSection.hidden = !showWorkGrid;
-    if (projectImgGridSeparator) projectImgGridSeparator.hidden = !showWorkGrid;
-    
+    const slideshow = buildSlideshowBlock(project, workList);
+    if (slideshow) {
+        mount.appendChild(slideshow);
+        initSlideshow(document.getElementById("slidesTrack")?.children.length ?? 0);
+    }
+    const t1 = buildTextBlock(project, "description");
+    if (t1) mount.appendChild(t1);
 
-    const instSection = document.getElementById("installationImgGrid");
-    const instSeparator = document.getElementById("installationSeparator");
-    const instGrid = document.getElementById("installationGridImages");
-    const rawInst = project.installation_images ?? [];
-    const hasInst =
-        Array.isArray(rawInst) &&
-        rawInst.length > 0 &&
-        !(rawInst.length === 1 && String(rawInst[0]).trim().toUpperCase() === "NA");
+    const video = buildVideoBlock(project);
+    if (video) mount.appendChild(video);
 
-    if (!hasInst) {
-        if (instGrid) instGrid.innerHTML = "";
-        if (instSection) instSection.hidden = true;
-        if (instSeparator) instSeparator.hidden = true;
-    } else {
-        if (instSection) instSection.hidden = false;
-        if (instSeparator) instSeparator.hidden = false;
-        // continue with your existing instList creation + population
+    const t2 = buildTextBlock(project, "description2");
+    if (t2) mount.appendChild(t2);
+
+    const isSpecial =
+        project.id === "moments_before_the_fall" || project.title === "moments_before_the_fall";
+
+    if (isSpecial) {
+        const item = Array.isArray(project.other_images) ? project.other_images[0] : null;
+
+        const midImg = buildSingleModalImageGridBlock({
+            item,
+            show: true,
+            variant: "single",
+            projectTitle: project.title,
+            withSeparator: false
+        });
+
+        if (midImg) mount.appendChild(midImg);
     }
 
-    if (instGrid) instGrid.innerHTML = "";
+    const t3 = buildTextBlock(project, "description3");
+    if (t3) mount.appendChild(t3);
 
-    // 4) Build a single modal list (sequential)
-    const workList = (project.work_images ?? []).map(x => ({ kind: "work", ...x }));
-    const instList = (project.installation_images ?? []).map(x => ({ kind: "installation", ...x }));
+    const workGrid = buildImageGridBlock({
+        items: workList,
+        show: isYes(project.show_work_images_grid) && workList.length > 0,
+        modalIndexBase: 0,
+        variant: "multi",
+        projectTitle: project.title,
+        withSeparator: true
+    });
+    if (workGrid) mount.appendChild(workGrid);
 
+    const instGrid = buildImageGridBlock({
+        items: instList,
+        show: isYes(project.show_installation_images_grid) && instList.length > 0,
+        modalIndexBase: workList.length,
+        variant: "single",
+        projectTitle: project.title,
+        withSeparator: true
+    });
+    if (instGrid) mount.appendChild(instGrid);
+}
+
+function normalizeProject(project) {
+    workList = (project.work_images ?? []).map(x => ({ kind: "work", ...x }));
+    instList = (project.installation_images ?? []).map(x => ({ kind: "installation", ...x }));
     modalWorkList = workList;
     modalInstList = instList;
-
     modalImageList = [...workList, ...instList];
-
-    // Helper to attach click -> openImageModal(modalIndex)
-    const wireModal = (imgEl, modalIndex) => {
-        imgEl.dataset.modalIndex = String(modalIndex);
-
-        imgEl.draggable = false;
-        imgEl.addEventListener("dragstart", (e) => e.preventDefault());
-
-        imgEl.addEventListener("click", () => {
-            if (window.__slideshowSuppressClick) return;
-            openImageModal(modalIndex);
-        });
-    };
-
-
-    // 5) Render slideshow from work images only (like you had)
-    workList.forEach((item, i) => {
-        const slideImg = document.createElement("img");
-        slideImg.src = item.src;
-        slideImg.alt = item.title ?? project.title;
-        wireModal(slideImg, i);            // modal index == work index
-        track.appendChild(slideImg);
-    });
-
-    // 6) Render work grid (same indices as workList)
-    if (workGrid) {
-        workList.forEach((item, i) => {
-            const img = document.createElement("img");
-            img.src = item.src;
-            img.alt = item.title ?? project.title;
-            wireModal(img, i);
-            workGrid.appendChild(img);
-        });
-    }
-
-    // 7) Render installation grid (indices offset by workList.length)
-    if (instGrid) {
-        instList.forEach((item, j) => {
-            const modalIndex = workList.length + j;
-            const img = document.createElement("img");
-            img.src = item.src;
-            img.alt = item.label ?? project.title;
-            wireModal(img, modalIndex);
-            instGrid.appendChild(img);
-        });
-    }
-
-    // 8) Description
-    const textEl = document.getElementById("projectText");
-    const textE2 = document.getElementById("projectText2");
-    const textE3 = document.getElementById("projectText3");
-    textEl.innerHTML = "";
-    textE2.innerHTML = "";
-    textE3.innerHTML = "";
-    (project.description ?? []).forEach(par => {
-        const p = document.createElement("p");
-        p.textContent = par;
-        textEl.appendChild(p);
-    });
-    (project.description2 ?? []).forEach(par => {
-        const p = document.createElement("p");
-        p.textContent = par;
-        textE2.appendChild(p);
-    });
-    textE2.hidden = textE2.childElementCount === 0;
-    (project.description3 ?? []).forEach(par => {
-        const p = document.createElement("p");
-        p.textContent = par;
-        textE3.appendChild(p);
-    });
-    textE3.hidden = textE3.childElementCount === 0;
-
-
-    // 9)
-    const videoSection = document.getElementById("videoInlay");
-    const iframeYT = document.getElementById("projectYTiframe");
-    const iframeVimeo = document.getElementById("projectVimeoiframe");
-
-    if (project.video_host === "YT") {
-        if (iframeYT) iframeYT.hidden = false;
-        if (iframeVimeo) iframeVimeo.hidden = true;
-        const embedUrl = toYouTubeEmbedUrl(project.video_link);
-        if (videoSection && iframeYT && embedUrl) {
-            iframeYT.src = embedUrl;
-            videoSection.hidden = false;
-        } else if (videoSection && iframeYT) {
-            iframeYT.src = "";
-            videoSection.hidden = true;
-        }
-    }
-    else if (project.video_host === "Vimeo") {
-
-        if (iframeYT) iframeYT.hidden = true;
-        if (iframeVimeo) iframeVimeo.hidden = false;
-        const embedUrl = toVimeoEmbedUrl(project.video_link);
-        if (videoSection && iframeVimeo && embedUrl) {
-            iframeVimeo.src = embedUrl;
-            videoSection.hidden = false;
-        } else if (videoSection && iframeVimeo) {
-            iframeVimeo.src = "";
-            videoSection.hidden = true;
-        }
-    }
-    
-    else if (project.video_host === "NA") {
-        if (iframeYT) iframeYT.hidden = true;
-        if (iframeVimeo) iframeVimeo.hidden = true;
-        videoSection.hidden = true;
-    }
-
-
-    //MSK Special handling, make dynamic
-    const textImageSection = document.getElementById("projectTextImg");
-    const isSpecial = project.id === "moments_before_the_fall" || project.title === "moments_before_the_fall";
-    if (textImageSection) {
-        // reset every time to avoid leftovers from previous project
-        textImageSection.innerHTML = "";
-        textImageSection.hidden = true;
-
-        // Prefer project.id; fall back to title if you must
-        
-
-        const other = project.other_images ?? [];
-        const hasOtherImages = Array.isArray(other) && other.length > 0;
-
-        if (isSpecial && hasOtherImages) {
-            textImageSection.hidden = false;
-
-            // If you only want the first one
-            const item = other[0];
-
-            const figure = document.createElement("figure");
-            figure.className = "projectTextFigure"; // optional CSS hook
-
-            const img = document.createElement("img");
-            img.src = item.src;
-            img.alt = item.label || project.title || "";
-
-            figure.appendChild(img);
-            textImageSection.appendChild(figure);
-        }
-    }
-
-    if (slideshowSection) {
-        slideshowSection.classList.toggle("slideshow--single", isSpecial);
-    }
-
-
-    // 10) Slideshow dots count (work images)   
-    initSlideshow(workList.length);
 }
+
+function renderTitle(project) {
+    els.titleEl.textContent = `${project.title} (${project.date})`;
+    requestAnimationFrame(syncTopBarFade);
+}
+
+
+//==========Slideshow Rendering==========
+function buildSlideshowBlock(project, workList) {
+    const show = isYes(project.show_work_images_slideshow) && workList.length > 0;
+    if (!show) return null;
+
+    const isSpecial =
+        project.id === "moments_before_the_fall" || project.title === "moments_before_the_fall";
+
+    // container
+    const section = document.createElement("section");
+    section.className = "slideshowContainer";
+    section.id = "slideshow";
+    section.classList.toggle("slideshow--single", isSpecial);
+
+    // arrows
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "slideArrow slideArrowLeft";
+    prevBtn.id = "slidePrev";
+    prevBtn.type = "button";
+    prevBtn.innerHTML = "&#10094;";
+
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "slideArrow slideArrowRight";
+    nextBtn.id = "slideNext";
+    nextBtn.type = "button";
+    nextBtn.innerHTML = "&#10095;";
+
+    // track
+    const track = document.createElement("div");
+    track.className = "slidesTrack";
+    track.id = "slidesTrack";
+
+    // populate images
+    workList.forEach((item, i) => {
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = item.title ?? project.title ?? "";
+        wireModal(img, i);
+        track.appendChild(img);
+    });
+
+    section.appendChild(prevBtn);
+    section.appendChild(track);
+    section.appendChild(nextBtn);
+
+    // dots (sibling below)
+    const dots = document.createElement("div");
+    dots.className = "slideshowDots";
+    dots.id = "slideshowDots";
+
+    // package as one appendable unit
+    const frag = document.createDocumentFragment();
+    frag.appendChild(section);
+    frag.appendChild(dots);
+    return frag;
+}
+
+//==========Images Rendering==========
+function buildImageGridBlock({ items, show, modalIndexBase, variant, projectTitle, withSeparator }) {
+    const okItems = Array.isArray(items) && items.length > 0;
+    if (!show || !okItems) return null;
+
+    const section = document.createElement("section");
+    section.className = "imageGrid";
+
+    const grid = document.createElement("div");
+    grid.className = "imageGridImages";
+    section.appendChild(grid);
+
+    renderImageGrid({
+        sectionEl: section,
+        separatorEl: null,
+        gridEl: grid,
+        items,
+        show: true,
+        modalIndexBase,
+        variant,
+        projectTitle
+    });
+
+    if (!withSeparator) return section;
+
+    const frag = document.createDocumentFragment();
+    frag.appendChild(buildSeparator());
+    frag.appendChild(section);
+    return frag;
+}
+
+function renderImageGrid({
+    sectionEl,
+    separatorEl,
+    gridEl,
+    items,
+    show,
+    modalIndexBase = 0,
+    variant = "multi",
+    projectTitle = ""
+}) {
+    if (!sectionEl || !gridEl) return;
+
+    sectionEl.hidden = !show;
+    if (separatorEl) separatorEl.hidden = !show;
+
+    // clear
+    gridEl.innerHTML = "";
+    if (!show) return;
+
+    sectionEl.classList.toggle("is-single", variant === "single");
+    sectionEl.classList.toggle("is-multi", variant !== "single");
+
+    // render
+    items.forEach((item, i) => {
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = item.label ?? item.title ?? projectTitle;
+
+        wireModal(img, modalIndexBase + i);
+        gridEl.appendChild(img);
+    });
+}
+
+//==========Text Rendering==========
+function buildTextBlock(project, key) {
+    const section = document.createElement("section");
+    section.className = "projectText";
+
+    renderTextChunk(project, key, section);
+
+    return section.hidden ? null : section;
+}
+
+function renderTextChunk(project, key, mountEl) {
+    if (!mountEl) return;
+    const raw = project?.[key];
+    const paras = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+    mountEl.innerHTML = "";
+    paras
+        .map(s => String(s ?? "").trim())
+        .filter(Boolean)
+        .forEach(par => {
+            const p = document.createElement("p");
+            p.textContent = par;
+            mountEl.appendChild(p);
+        });
+    mountEl.hidden = mountEl.childElementCount === 0;
+}
+
+//==========Video rendering==========
+function buildVideoBlock(project) {
+    if (!isYes(project.show_video)) return null;
+
+    const host = String(project.video_host ?? "").trim();
+    if (host !== "YT" && host !== "Vimeo") return null;
+
+    const embedUrl =
+        host === "YT" ? toYouTubeEmbedUrl(project.video_link)
+            : toVimeoEmbedUrl(project.video_link);
+
+    if (!embedUrl) return null;
+
+    const section = document.createElement("section");
+    section.className = "videoInlay";
+    section.id = "videoInlay";
+
+    const inner = document.createElement("div");
+    inner.className = "videoInlayInner";
+    section.appendChild(inner);
+
+    const iframe = document.createElement("iframe");
+    iframe.title = "Project video";
+    iframe.frameBorder = "0";
+    iframe.allowFullscreen = true;
+    iframe.src = embedUrl;
+
+    if (host === "YT") {
+        iframe.id = "projectYTiframe"; // optional
+        iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    } else {
+        iframe.id = "projectVimeoiframe"; // optional
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        iframe.allow = "fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share";
+    }
+
+    inner.appendChild(iframe);
+    return section;
+}
+
+//==========Inline Images Rendering==========
+function buildSingleModalImageGridBlock({ item, show, variant = "single", projectTitle = "", withSeparator = false }) {
+    if (!show || !item?.src) return null;
+
+    const section = document.createElement("section");
+    section.className = "imageGrid";
+    section.classList.add("imageGrid--inline");
+
+    const grid = document.createElement("div");
+    grid.className = "imageGridImages";
+    section.appendChild(grid);
+
+    // reuse your styling toggles
+    section.classList.toggle("is-single", variant === "single");
+    section.classList.toggle("is-multi", variant !== "single");
+
+    const img = document.createElement("img");
+    img.src = item.src;
+    img.alt = item.label ?? item.title ?? projectTitle ?? "";
+
+    img.draggable = false;
+    img.addEventListener("dragstart", (e) => e.preventDefault());
+    img.addEventListener("click", () => openSingleImageModal(item));
+
+    grid.appendChild(img);
+
+    if (!withSeparator) return section;
+
+    const frag = document.createDocumentFragment();
+    frag.appendChild(buildSeparator());
+    frag.appendChild(section);
+    return frag;
+}
+
+//==========Separators Rendering==========
+function buildSeparator() {
+    const sep = document.createElement("div");
+    sep.className = "projectSeparator";
+    return sep;
+}
+
+//==========Category Pages==========
+
+async function loadCategories() {
+    const res = await fetch("categories.json");
+    return await res.json();
+}
+
+function renderCategoryPage(category) {
+    els.titleEl.textContent = `${category.title}`;
+    requestAnimationFrame(syncTopBarFade);
+
+    const mount = document.getElementById("projectMain");
+    if (!mount) return;
+
+    modalCategoryList = (category.items ?? [])
+        .filter(x => x && x.src)
+        .map(x => ({ kind: "category", ...x }));
+    const frag = document.createDocumentFragment();
+    (category.items ?? []).forEach(item => {
+        const unit = buildCategoryUnit(item);
+        if (unit) frag.appendChild(unit);
+    });
+
+    mount.replaceChildren(frag); // clears + inserts in one shot [web:282]
+}
+
+//==========Category page units==========
+function buildCategoryUnit(item) {
+    if (!item) return null;
+
+    const section = document.createElement("section");
+    section.className = "categoryUnit";
+
+    // left text
+    const left = document.createElement("div");
+    left.className = "categoryUnitText";
+
+    const lines = itemLines(item);
+    lines.forEach(line => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        left.appendChild(p);
+    });
+
+    // right media
+    const right = document.createElement("div");
+    right.className = "categoryUnitMedia";
+
+    if (item.src) {
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = lines[0] ?? item.label ?? item.title ?? "";
+        img.draggable = false;
+        img.addEventListener("dragstart", (e) => e.preventDefault());
+        img.addEventListener("click", () => {
+            modalScopeList = modalCategoryList;
+            // Prefer the index if present; fallback to src match
+            modalScopeIndex =
+                (typeof item._catIndex === "number")
+                    ? item._catIndex
+                    : modalCategoryList.findIndex(x => x.src === item.src);
+
+            const modal = document.getElementById("imageModal");
+            modal.classList.add("is-open");
+
+            const imgEl = document.getElementById("imageModalImg");
+            imgEl.style.transform = "translateX(0px)";
+            imgEl.style.opacity = "1";
+
+            showModalImageAt(modalScopeIndex);
+        });
+        right.appendChild(img);
+    } else if (item.video_link) {
+        const host = String(item.video_host ?? "").trim();
+        const embedUrl =
+            host === "YT" ? toYouTubeEmbedUrl(item.video_link)
+                : host === "Vimeo" ? toVimeoEmbedUrl(item.video_link)
+                    : null;
+
+        if (embedUrl) {
+            const iframe = document.createElement("iframe");
+            iframe.title = item.title ? String(item.title) : "Video";
+            iframe.frameBorder = "0";
+            iframe.allowFullscreen = true;
+            iframe.src = embedUrl;
+
+            // keep parity with your project video rules
+            if (host === "YT") {
+                iframe.allow =
+                    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            } else {
+                iframe.referrerPolicy = "strict-origin-when-cross-origin";
+                iframe.allow = "fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share";
+            }
+
+            right.appendChild(iframe);
+        }
+    } else {
+        // unknown item type: render only left text
+    }
+
+    section.appendChild(left);
+    section.appendChild(right);
+
+    const frag = document.createDocumentFragment();
+    frag.appendChild(section);
+    frag.appendChild(buildSeparator());
+    return frag;
+}
+
+//==========Modal Images==========
+function wireModal(imgEl, modalIndex) {
+    imgEl.dataset.modalIndex = String(modalIndex);
+
+    imgEl.draggable = false;
+    imgEl.addEventListener("dragstart", (e) => e.preventDefault());
+
+    imgEl.addEventListener("click", () => {
+        if (window.__slideshowSuppressClick) return;
+        openImageModal(modalIndex);
+    });
+};
 
 // Renders image + caption for a given index (wrap-safe)
 function showModalImageAt(index) {
@@ -263,17 +473,37 @@ function showModalImageAt(index) {
 
     if (item.kind === "work") {
         captionEl.innerHTML = [item.title, item.medium, item.size, item.year].filter(Boolean).join("<br>");
+    } else if (item.kind === "installation") {
+        captionEl.innerHTML = item.label ?? "";
     } else {
-        captionEl.innerHTML = item.label; // or put extra installation fields here later
+        captionEl.innerHTML = item.label ?? item.title ?? "";
     }
     const modal = document.getElementById("imageModal");
     modal.classList.toggle("is-installation", item.kind === "installation");
+}
+
+function openSingleImageModal(item) {
+    if (!item?.src) return;
+
+    modalScopeList = [{ kind: "single", ...item }];
+    modalScopeIndex = 0;
+
+    const modal = document.getElementById("imageModal");
+    modal.classList.add("is-open");
+    const imgEl = document.getElementById("imageModalImg");
+    imgEl.style.transform = "translateX(0px)";
+    imgEl.style.opacity = "1";
+
+    showModalImageAt(0);
 }
 
 // Opens the modal at a given index
 function openImageModal(globalIndex) {
     const modal = document.getElementById("imageModal");
     const clicked = modalImageList[globalIndex];
+    const imgEl = document.getElementById("imageModalImg");
+    imgEl.style.transform = "translateX(0px)";
+    imgEl.style.opacity = "1";
 
     if (!clicked) return;
 
@@ -289,8 +519,8 @@ function openImageModal(globalIndex) {
     showModalImageAt(modalScopeIndex);
 }
 
-
 function animateModalChange(delta) {
+    if (!modalScopeList || modalScopeList.length <= 1) return;
     if (__modalAnimating) return;
     const modal = document.getElementById("imageModal");
     const img = document.getElementById("imageModalImg");
@@ -344,6 +574,7 @@ function closeImageModal() {
     imgEl.src = '';
 }
 
+//==========Slideshow scrolling logic==========
 function initSlideshow(totalImages) {
     // Clean up any previous slideshow listeners (happens when switching projects)
     if (slideshowAbort) slideshowAbort.abort();
@@ -523,12 +754,11 @@ function initSlideshow(totalImages) {
         slideshowTimer = setInterval(() => goToState(current + 1), 5000);
     }
 
-    // wait for images to load (same idea as your current code)
+    // wait for images to load
     let loaded = 0;
     slides.forEach(img => {
         if (img.complete) {
             loaded++;
-            if (loaded === slides.length) setup();
         } else {
             img.addEventListener('load', () => {
                 loaded++;
@@ -551,101 +781,90 @@ function setCurrentProject(id) {
     if (!project) return;
 
     const details = document.querySelector('.projectDetails');
+    details?.classList.add('is-fading');
 
-    // start fade out
-    details.classList.add('is-fading');
-
-    // wait for fade-out, then swap content and fade back in
     setTimeout(() => {
         currentProjectId = id;
-        renderProject(project);   // updates title, slideshow, text
-
-        // update active class on links
-        const links = document.querySelectorAll('.projectLink');
-        links.forEach(link => {
-            const thisId = new URLSearchParams(link.href.split('?')[1]).get('id');
-            link.classList.toggle('is-active', thisId === id);
-        });
-
-        // update URL without reload
-        const url = new URL(window.location);
-        url.searchParams.set('id', id);
-        window.history.pushState({}, '', url);
-        updateProjectNavButtons()
-        // fade back in
-        requestAnimationFrame(() => {
-            details.classList.remove('is-fading');
-        });
+        renderProject(project);
+        updateProjectNavButtons();
         scrollToTopSmooth();
-    }, 250); // same as CSS transition duration
-    
 
+        requestAnimationFrame(() => {
+            details?.classList.remove('is-fading');
+        });
+    }, 250);
 }
 
+//==========Populate Left Panel==========
+function populateProjectMenu(projects) {
+    const menu = document.getElementById("projectMenu");
+    if (!menu) return;
 
-async function loadProjects() {
-    const response = await fetch('projects.json');
-    const projects = await response.json();
-
-    allProjects = projects;
-
-    const params = new URLSearchParams(window.location.search);
-    const idFromUrl = params.get('id');
-    const initialProject = projects.find(p => p.id === idFromUrl) || projects[0];
-
-    const menu = document.getElementById('projectMenu');
-    menu.innerHTML = '';
+    menu.innerHTML = "";
 
     projects.forEach(project => {
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = `?id=${project.id}`;
         link.textContent = project.title;
-        link.className = 'projectLink';
+        link.className = "projectLink";
+        link.dataset.id = project.id;
 
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            closeLeftPanel();
-            setCurrentProject(project.id);
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            closeLeftPanel?.();
+            setRoute({ id: project.id }, { replace: false });
+            handleRouteChange();
         });
 
         menu.appendChild(link);
     });
-
-    setCurrentProject(initialProject.id);
-    syncLeftPanelBgWidth()
-    maybeRunMenuIntro();
 }
 
-function maybeRunMenuIntro() {
-    const url = new URL(window.location.href);
+function populateCategoryMenu(categories) {
+    const menu = document.getElementById("categoryMenu");
+    if (!menu) return;
 
-    // Only if user arrived via a Home link that added intro=1
-    if (url.searchParams.get('intro') !== '1') return;
+    menu.innerHTML = "";
 
-    // Remove intro param so refresh/back won’t replay it
-    url.searchParams.delete('intro');
-    window.history.replaceState({}, '', url);
+    categories.forEach(cat => {
+        const link = document.createElement("a");
+        link.href = `?category=${encodeURIComponent(cat.id)}`;
+        link.textContent = cat.title;
+        link.className = "categoryLink";
+        link.dataset.category = cat.id;
 
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            closeLeftPanel?.();
+            setRoute({ category: cat.id }, { replace: false });
+            handleRouteChange();
+        });
+
+        menu.appendChild(link);
+    });
+}
+
+
+//==========Intro Left Panel==========
+function runMenuIntro() {
     openLeftPanel();
 
     let timer = setTimeout(() => {
         closeLeftPanel();
-    }, 4000);
-
-    // If user interacts, cancel the auto-close
+    }, 4000); // setTimeout returns an id you can clear later [web:419]
 
     const cancel = () => {
         clearTimeout(timer);
         timer = null;
-        if (els.hamburgerBtn) els.hamburgerBtn.removeEventListener('pointerdown', cancel);
-        if (els.leftPanel) els.leftPanel.removeEventListener('pointerdown', cancel);
+        els.hamburgerBtn?.removeEventListener("pointerdown", cancel);
+        els.leftPanel?.removeEventListener("pointerdown", cancel);
     };
 
-    if (els.hamburgerBtn) els.hamburgerBtn.addEventListener('pointerdown', cancel, { once: true });
-    if (els.leftPanel) els.leftPanel.addEventListener('pointerdown', cancel, { once: true });
+    els.hamburgerBtn?.addEventListener("pointerdown", cancel, { once: true });
+    els.leftPanel?.addEventListener("pointerdown", cancel, { once: true });
 }
 
-
+//==========Project Navigation==========
 function goToAdjacentProject(delta) {
     if (!Array.isArray(allProjects) || !allProjects.length || !currentProjectId) return;
 
@@ -655,8 +874,13 @@ function goToAdjacentProject(delta) {
     const nextIdx = idx + delta;
     if (nextIdx < 0 || nextIdx >= allProjects.length) return; // no wrap
 
-    closeLeftPanel?.(); // optional; keeps UI consistent
-    setCurrentProject(allProjects[nextIdx].id);
+    closeLeftPanel?.();
+
+    const nextId = allProjects[nextIdx].id;
+
+    // router-driven navigation (updates URL + highlight)
+    setRoute({ id: nextId }, { replace: false });
+    handleRouteChange();
 }
 
 function updateProjectNavButtons() {
@@ -680,11 +904,9 @@ function updateProjectNavButtons() {
 function toYouTubeEmbedUrl(url) {
     if (!url) return null;
 
-    // Accept array or string
     if (Array.isArray(url)) url = url[0];
     if (typeof url !== "string") return null;
 
-    // Extract video id from common YouTube URL forms
     const m =
         url.match(/youtu\.be\/([^?&#/]+)/) ||
         url.match(/[?&]v=([^?&#/]+)/) ||
@@ -695,18 +917,12 @@ function toYouTubeEmbedUrl(url) {
     return id ? `https://www.youtube.com/embed/${id}` : null;
 }
 
-
 function toVimeoEmbedUrl(url) {
-
     if (!url) return null;
-
-    // Accept array or string
     if (Array.isArray(url)) url = url[0];
     if (typeof url !== "string") return null;
 
-    // Normalize
     url = url.trim();
-
     const m =
         url.match(/player\.vimeo\.com\/video\/(\d+)/) ||
         url.match(/vimeo\.com\/(?:.*\/)?(\d+)(?:$|[/?#])/);
@@ -722,16 +938,28 @@ function toVimeoEmbedUrl(url) {
 }
 
 function scrollToTopSmooth() {
+    // kick off immediately
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
+    // then correct after a couple frames (after DOM/layout changes)
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         });
     });
 }
 
+function toggleLeftPanel() {
+    if (!els.hamburgerBtn || !els.leftPanel) return;
+    els.leftPanel.classList.toggle('closed');
+    els.hamburgerBtn.classList.toggle('open');
+    const isOpen = !els.leftPanel.classList.contains('closed');
+    if (els.leftBg) els.leftBg.classList.toggle('is-visible', isOpen);
+    if (els.homeIcon) els.homeIcon.hidden = !isOpen;   // visible only when open
+}
+
 function closeLeftPanel() {
     if (!els.hamburgerBtn || !els.leftPanel) return;
-
     els.leftPanel.classList.add('closed');
     els.hamburgerBtn.classList.remove('open');
     if (els.leftBg) els.leftBg.classList.remove('is-visible');
@@ -740,7 +968,6 @@ function closeLeftPanel() {
 
 function openLeftPanel() {
     if (!els.hamburgerBtn || !els.leftPanel) return;
-
     els.leftPanel.classList.remove('closed');
     els.hamburgerBtn.classList.add('open');
     if (els.leftBg) els.leftBg.classList.add('is-visible');
@@ -748,41 +975,135 @@ function openLeftPanel() {
     syncLeftPanelBgWidth()
 }
 
-
 function syncLeftPanelBgWidth() {
     if (!els.leftPanel || !els.leftBg) return;
-
     const panelW = Math.round(els.leftPanel.getBoundingClientRect().width);
     const vw = Math.round(window.visualViewport?.width ?? window.innerWidth);
-
     const isMobile = vw <= 900; // match your CSS breakpoint
     const w = isMobile ? 1000 : panelW;
-
     els.leftBg.style.setProperty('--panel-w', `${w}px`);
+}
+
+function syncLeftPanelActiveLinks() {
+    const { category, id } = getRoute();
+
+    document.querySelectorAll(".projectLink").forEach(a => {
+        a.classList.toggle("is-active", !!id && a.dataset.id === id);
+    });
+
+    document.querySelectorAll(".categoryLink").forEach(a => {
+        a.classList.toggle("is-active", !!category && a.dataset.category === category);
+    });
 }
 
 function syncTopBarFade() {
     if (!els.titleSeparator || !els.topBar) return;
-
-    // bottom is viewport Y coordinate of the separator’s bottom edge
-    const fadeStartPx = Math.round(els.titleSeparator.getBoundingClientRect().bottom); // px [web:12]
-
-    const extraSolidPadding = 8; // set e.g. 8/12 if you want space after the line
+    const fadeStartPx = Math.round(els.titleSeparator.getBoundingClientRect().bottom);
+    const extraSolidPadding = 8;
     els.topBar.style.setProperty('--panel-h', `${Math.ceil(fadeStartPx + extraSolidPadding)}px`);
 }
 
-
 function isYes(v) {
-  return String(v ?? "").trim().toLowerCase() === "yes";
+    return String(v ?? "").trim().toLowerCase() === "yes";
 }
 
-//Event Listeners
-window.addEventListener('resize', syncTopBarFade, syncLeftPanelBgWidth);
+function toLines(value) {
+    if (Array.isArray(value)) return value.map(v => String(v ?? "").trim()).filter(Boolean);
+    if (value == null) return [];
+    const s = String(value).trim();
+    return s ? [s] : [];
+}
 
-document.addEventListener('DOMContentLoaded', () => {
+function itemLines(item) {
+    // images
+    if ("src" in item) {
+        return [item.title, item.medium, item.size, item.year, item.label]
+            .map(v => String(v ?? "").trim())
+            .filter(Boolean);
+    }
+    // videos
+    if ("video_link" in item) {
+        return [item.title, item.date]
+            .map(v => String(v ?? "").trim())
+            .filter(Boolean);
+    }
+    return [];
+}
+
+function getRoute() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        category: params.get("category"),
+        id: params.get("id"),
+        intro: params.get("intro"),
+    };
+}
+
+function setRoute({ id = null, category = null, intro = null }, { replace = false } = {}) {
+    const url = new URL(window.location.href);
+
+    // mutually exclusive main routes
+    if (id) {
+        url.searchParams.set("id", id);
+        url.searchParams.delete("category");
+    } else if (category) {
+        url.searchParams.set("category", category);
+        url.searchParams.delete("id");
+    } else {
+        url.searchParams.delete("id");
+        url.searchParams.delete("category");
+    }
+
+    // intro is one-shot; default is delete
+    if (intro === "1") url.searchParams.set("intro", "1");
+    else url.searchParams.delete("intro");
+
+    if (replace) window.history.replaceState({}, "", url);
+    else window.history.pushState({}, "", url);
+}
+
+function handleRouteChange({ replace = false } = {}) {
+    const { category, id, intro } = getRoute();
+    scrollToTopSmooth();
+    // consume intro once (remove from URL, then run intro UI)
+    if (intro === "1") {
+        setRoute({ id, category, intro: null }, { replace: true });
+        runMenuIntro();
+    }
+
+    if (category) {
+        const prevBtn = document.getElementById("projectPrevProject");
+        const nextBtn = document.getElementById("projectNextProject");
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = true;
+
+        const catObj = allCategories.find(c => c.id === category);
+        if (catObj) renderCategoryPage(catObj);
+
+        syncLeftPanelActiveLinks();
+        return;
+    }
+
+    // project route
+    const proj = allProjects.find(p => p.id === id) || allProjects[0];
+    if (proj) setCurrentProject(proj.id);
+    syncLeftPanelActiveLinks();
+
+}
+
+
+//==========Event Listeners==========
+window.addEventListener("resize", syncTopBarFade);
+window.addEventListener("resize", syncLeftPanelBgWidth);
+
+window.addEventListener("popstate", () => {
+    handleRouteChange();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
 
     initDomRefs();
-    
+
     if (els.hamburgerBtn) {
         els.hamburgerBtn.addEventListener('click', toggleLeftPanel);
     }
@@ -792,9 +1113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    loadProjects();
-
-
     const prevBtn = document.getElementById("projectPrevProject");
     const nextBtn = document.getElementById("projectNextProject");
 
@@ -802,7 +1120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextBtn) nextBtn.addEventListener("click", () => goToAdjacentProject(1));
 
     const modal = document.getElementById('imageModal');
-    const modalContent = document.querySelector(".imageModalContent");
     const swipeEl = document.getElementById("imageModalImg");
     const closeBtn = document.querySelector('.imageModalClose');
     const backdrop = document.querySelector('.imageModalBackdrop');
@@ -819,8 +1136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'ArrowLeft') showPrevModalImage();
         if (e.key === 'ArrowRight') showNextModalImage();
     });
-
-
 
     //Modal swipe drag
     if (modal && swipeEl) {
@@ -872,6 +1187,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // compute current dx from transform-less state (use last pointer position)
             const dx = e.clientX - startX;
 
+            if (!modalScopeList || modalScopeList.length <= 1) {
+                swipeEl.classList.remove("is-dragging");
+                swipeEl.style.transform = "translateX(0px)";
+                swipeEl.style.opacity = "1";
+                return;
+            }
+
             swipeEl.classList.remove("is-dragging"); // re-enable CSS transition
 
             // Snap decision
@@ -902,5 +1224,19 @@ document.addEventListener('DOMContentLoaded', () => {
         swipeEl.addEventListener("pointercancel", finish);
     }
 
+    const [categories, projects] = await Promise.all([
+        loadCategories(),
+        fetch("projects.json").then(r => {
+            if (!r.ok) throw new Error(`projects.json HTTP ${r.status}`);
+            return r.json();
+        })
+    ]);
+
+    allCategories = categories;
+    allProjects = projects;
+    populateCategoryMenu(allCategories);
+    populateProjectMenu(allProjects);
+
+    handleRouteChange({ replace: true });
+
 });
-//Say bumblebee if you can read this

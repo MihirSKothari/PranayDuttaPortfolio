@@ -355,7 +355,7 @@
         "show_work_images_slideshow": "yes",
         "show_work_images_grid": "yes",
         "show_video": "yes",
-        "show_installation_images_grid": "yes",
+        "show_installation_images_grid": "no",
         "work_images": [
             {
                 "src": "beneath_the_steel_sky/Work Images/1.jpg",

@@ -180,13 +180,7 @@ body {
   margin-top: 10px;
 }
 
-.projectImgGridSeparator {
-  width: 100%;
-  background-color: #9c9c9c;
-  height: 2px;
-}
-
-.installationSeparator {
+.projectSeparator {
   width: 100%;
   background-color: #9c9c9c;
   height: 2px;
@@ -288,16 +282,27 @@ body {
   transform: translateX(-100%);
 }
 
-/*===== PROJECT LIST =====*/
+/*===== PROJECT AND CATEGORY LIST =====*/
+.projectsBlock, .categoriesBlock {
+  display: flex;
+  position: relative;
+  margin-bottom: 3rem;
+  flex-direction: column;
+  gap: 0.6rem;
+}
 
-.projectMenu {
+.categoriesBlock {
+  margin-top: auto;
+}
+
+.categoryMenu, .projectMenu {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
   margin-top: 2rem;
 }
 
-.projectLink {
+.projectLink, .categoryLink {
   display: block;
   font-weight: 100;
   font-size: 1.0rem;
@@ -309,12 +314,11 @@ body {
   max-width: 100%;
 }
 
-.projectLink:hover {
+.projectLink:hover, .categoryLink:hover {
   color: #c3ff4a;
-  ;
 }
 
-.projectLink.is-active {
+.projectLink.is-active , .categoryLink.is-active {
   color: #c3ff4a;
 }
 
@@ -323,32 +327,11 @@ body {
 .categoriesBlock {
   display: flex;
   position: relative;
-  margin-top: auto;
   margin-bottom: 3rem;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.categoryLink {
-  display: block;
-  font-weight: 100;
-  font-size: 1.0rem;
-  color: #9c9c9c;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  letter-spacing: 0.07em;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.categoryLink:hover {
-  color: #c3ff4a;
-  ;
-}
-
-.categoryLink.is-active {
-  color: #c3ff4a;
-}
 
 /*===== RIGHT SIDE =====*/
 .projectDetails {
@@ -553,41 +536,81 @@ body {
 }
 
 /*image-grid*/
-.projectImgGrid {
+.imageGrid  {
   padding-top: 5rem;
 }
 
-.projectGridImages {
+.imageGrid.is-multi .imageGridImages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.2rem;
 }
 
-.projectGridImages img {
+.imageGrid.is-multi .imageGridImages img {
   width: 100%;
   height: auto;
   object-fit: cover;
   cursor: pointer;
 }
 
-.installationImgGrid {
+.imageGrid.is-single {
   padding-top: 5rem;
 }
 
-.installationGridImages {
+.imageGrid.is-single .imageGridImages {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
 }
 
-
-.installationGridImages img {
+.imageGrid.is-single .imageGridImages img {
   width: 100%;
   height: auto;
   object-fit: contain;
   display: block;
   cursor: pointer;
+}
+
+.imageGrid.imageGrid--inline {
+  padding-top: 0;   /* or whatever you want instead of 5rem */
+}
+
+/* Category pages */
+.categoryUnit{
+  display: flex;
+  align-items: flex-start; /* top align both columns [web:453] */
+  gap: 24px;               /* adjust to taste */
+}
+
+.categoryUnitText{
+  flex: 1 1 0;
+  min-width: 0;           /* allow text column to shrink in flex layouts */
+  text-align: left;
+  
+}
+
+.categoryUnitMedia{
+  flex: 0 0 auto;
+  width: min(66vw, 100%);   /* make the column itself wide (but capped) [web:468] */
+  margin-left: auto;
+  text-align: right;
+}
+
+.categoryUnitMedia img{
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-left: auto;
+}
+
+.categoryUnitMedia iframe{
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;     /* keep proportional box [web:485] */
+  height: auto;
+  margin-left: auto;
+  border: 0;                /* optional */
 }
 
 
@@ -845,14 +868,13 @@ body {
     padding-top: 1rem;
   }
 
-  .videoSeparator,
-  .installationSeparator {
+  .projectSeparator {
     height: 1px;
     margin-top: 1rem;
   }
 
-  .projectImgGrid,
-  .installationImgGrid {
+  .imageGrid ,
+  .imageGrid.is-single {
     padding-top: 2rem;
     ;
   }
