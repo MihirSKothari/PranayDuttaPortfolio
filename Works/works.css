@@ -385,7 +385,7 @@ body {
 }
 
 .slideshowContainer.slideshow--single .slidesTrack {
-  gap: 0;
+  gap: 2rem;
 }
 
 .slideshowContainer.slideshow--single .slidesTrack img {
