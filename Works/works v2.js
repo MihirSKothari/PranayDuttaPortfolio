@@ -1,6 +1,9 @@
 const els = {};
 
 function initDomRefs() {
+    els.html = document.documentElement;
+    els.btnTheme = document.getElementById("themeToggle");
+    
     els.hamburgerBtn = document.getElementById('hamburgerToggle');
     els.leftPanel = document.querySelector('.worksLeft');
     els.leftBg = document.querySelector('.leftPanelBg');
@@ -904,6 +907,12 @@ function updateProjectNavButtons() {
 
 
 //========== Helper functions ==========
+function applyTheme(theme) {
+  els.html.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+}
+
+
 function toYouTubeEmbedUrl(url) {
     if (!url) return null;
 
@@ -1116,6 +1125,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    applyTheme(localStorage.getItem("theme") || "light");
+    els.btnTheme?.addEventListener("click", () => {
+        const current = els.html.getAttribute("data-theme") || "light";
+        applyTheme(current === "light" ? "dark" : "light");
+    });
     const prevBtn = document.getElementById("projectPrevProject");
     const nextBtn = document.getElementById("projectNextProject");
 

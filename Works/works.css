@@ -27,10 +27,6 @@
 }
 
 
-:root {
-  --bg-url: url("../BG2.jpg");
-}
-
 *,
 *::before,
 *::after {
@@ -48,8 +44,21 @@ body {
   height: 100%;
 }
 
+:root{
+  --bg-url: url("../BG2LOWRESb.jpg");
+  --maincolor: #2c2c2c;
+}
+
+html[data-theme="dark"]{
+  --bg-url: url("../BG2LOWRES.jpg");
+  --maincolor: #9c9c9c;
+}
+
+body{ color: var(--text); }
+.bgLayer{ background-image: var(--bg-url); }
+
 body {
-  color: #9c9c9c;
+  color: var(--maincolor);
   background: #000;
   font-family: 'Neris', sans-serif;
 }
@@ -139,7 +148,7 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
-  color: #9c9c9c;
+  color: var(--maincolor);
   transition: color 0.2s ease;
 }
 
@@ -175,15 +184,27 @@ body {
 
 .projectTitleSeparator {
   width: 100%;
-  background-color: #9c9c9c;
+  background-color: var(--maincolor);
   height: 2px;
   margin-top: 10px;
 }
 
 .projectSeparator {
   width: 100%;
-  background-color: #9c9c9c;
+  background-color: var(--maincolor);
   height: 2px;
+}
+
+
+.themeToggle{
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 50px;
+  width: 100px;
+  background-color: black;
+  color: white;
+  z-index: 100000;
 }
 
 /*===== LEFT PANEL =====*/
@@ -240,7 +261,7 @@ body {
   left: 5rem;
   width: 1.5rem;
   height: 1.5rem;
-  color: #9c9c9c;
+  color: var(--maincolor);
   background: none;
   border: none;
   padding: 0;
@@ -306,7 +327,7 @@ body {
   display: block;
   font-weight: 100;
   font-size: 1.0rem;
-  color: #9c9c9c;
+  color: var(--maincolor);
   text-decoration: none;
   transition: color 0.2s ease;
   letter-spacing: 0.07em;
@@ -381,6 +402,7 @@ body {
 
 .slideshowContainer.slideshow--single {
   max-height: 700px;
+  max-height:80vh;
   /* increase height vs current 500px */
 }
 
@@ -401,7 +423,7 @@ body {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9c9c9c;
+  color: var(--maincolor);
   font-size: 1.4rem;
   cursor: pointer;
   padding: 0 0.3rem;
@@ -459,7 +481,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #9c9c9c70;
+  background: var(--maincolor)70;
 }
 
 .slideshowDot:hover {
@@ -479,7 +501,7 @@ body {
   font-weight: 100;
   font-size: 1.0rem;
   line-height: 1.7;
-  color: #9c9c9c
+  color: var(--maincolor)
 }
 
 .projectText p+p {
@@ -717,7 +739,7 @@ body {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #9c9c9c;
+  color: var(--maincolor);
   font-size: 2rem;
   cursor: pointer;
   padding: 0 0.3rem;
@@ -745,7 +767,7 @@ body {
   right: 1rem;
   background: none;
   border: none;
-  color: #9c9c9c;
+  color: var(--maincolor);
   font-size: 3rem;
   cursor: pointer;
 }
@@ -764,9 +786,9 @@ body {
 .projectNavBtn {
   background: none;
   border: none;
-  /*  border: 1px solid #9c9c9c;
+  /*  border: 1px solid var(--maincolor);
   border-radius: 0.5rem;*/
-  color: #9c9c9c;
+  color: var(--maincolor);
   padding: 0.7rem 1rem;
   font: inherit;
   font-weight: 300;

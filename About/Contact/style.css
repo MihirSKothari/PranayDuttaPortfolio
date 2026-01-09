@@ -307,6 +307,7 @@ body {
 
 
 .aboutRight {
+  align-items: center;
   position: relative;
   width: 100%;
   margin-left: 0;
@@ -320,6 +321,7 @@ body {
   /* soft fade */
 }
 
+
 .aboutRight.is-fading {
   opacity: 0;
 }
@@ -331,6 +333,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  width: 60%;
 }
 
 /*===== LIST =====*/
@@ -345,7 +348,7 @@ body {
 .contactLink {
   display: block;
   font-weight: 100;
-  font-size: 1.2rem;
+  font-size: 1.0rem;
   color: #9c9c9c;
   text-decoration: none;
   transition: color 0.2s ease;
