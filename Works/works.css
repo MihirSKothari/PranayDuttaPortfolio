@@ -45,14 +45,22 @@ body {
 }
 
 :root{
-  --bg-url: url("../BG2LOWRESb.jpg");
-  --maincolor: #2c2c2c;
-}
-
-html[data-theme="dark"]{
   --bg-url: url("../BG2LOWRES.jpg");
   --maincolor: #9c9c9c;
 }
+
+html[data-theme="dark"]{
+  --bg-url: url("../BG2LOWRES.jpg");  
+}
+
+html[data-theme="darker"]{
+  --bg-url: url("../BG3LOWRES.jpg");  
+}
+
+html[data-theme="darkest"]{
+  --bg-url: url("../BG4LOWRES.jpg");  
+}
+
 
 body{ color: var(--text); }
 .bgLayer{ background-image: var(--bg-url); }

@@ -909,6 +909,7 @@ function updateProjectNavButtons() {
 //========== Helper functions ==========
 function applyTheme(theme) {
   els.html.setAttribute("data-theme", theme);
+  els.btnTheme.textContent = theme;
   localStorage.setItem("theme", theme);
 }
 
@@ -1125,10 +1126,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    applyTheme(localStorage.getItem("theme") || "light");
+    applyTheme(localStorage.getItem("theme") || "dark");
     els.btnTheme?.addEventListener("click", () => {
-        const current = els.html.getAttribute("data-theme") || "light";
-        applyTheme(current === "light" ? "dark" : "light");
+        const current = els.html.getAttribute("data-theme");
+        const themes = ["dark", "darker", "darkest"];
+        const next = themes[(themes.indexOf(current) + 1) % themes.length];
+        applyTheme(next);
     });
     const prevBtn = document.getElementById("projectPrevProject");
     const nextBtn = document.getElementById("projectNextProject");
