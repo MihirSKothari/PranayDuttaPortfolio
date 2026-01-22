@@ -349,51 +349,9 @@ body {
   letter-spacing: 0.07em;
 }
 
-/* Responsive tweaks 
-
 @media (max-width: 900px) {
-  .works-wrapper {
-    flex-direction: column;
+  .itemsBlock {
+    width:100%;
   }
 
-  .works-left {
-    width: 100%;
-    padding: 1.8rem 1.6rem 1.2rem;
-  }
-
-  .project-details {
-    padding: 0 1.6rem 2rem;
-  }
-
-  .project-title-bar {
-    padding: 1.2rem 0 1rem;
-    margin-left: 0;
-  }
-
-  .project-main {
-    padding: 1.5rem 0 0;
-  }
-
-  .slides-track img {
-    border-width: 6px;
-  }
 }
-
-@media (max-width: 600px) {
-  .top-bar {
-    margin-bottom: 1.6rem;
-  }
-
-  .works-label {
-    font-size: 1.1rem;
-  }
-
-  .project-title {
-    font-size: 1.3rem;
-  }
-
-  .project-text {
-    font-size: 0.9rem;
-  }
-}
-  */
