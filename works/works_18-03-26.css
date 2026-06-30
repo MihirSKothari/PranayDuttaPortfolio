@@ -44,11 +44,6 @@ body {
   height: 100%;
 }
 
-:root{
-  --bg-url: url("../BG3LOWRES.jpg");
-  --maincolor: #9c9c9c;
-}
-
 body{ color: var(--text); }
 .bgLayer{ background-image: var(--bg-url); }
 
